@@ -3,9 +3,10 @@ import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight } from "lucide-react";
 import { PageIntro } from "@/components/page-intro";
+import { Container } from "@/components/container";
 import { Badge } from "@/components/ui/badge";
-import { absoluteUrl } from "@/config/site";
-import { getAllContent } from "@/lib/content";
+import { absoluteUrl, assetUrl } from "@/config/site";
+import { contentRepository } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Projects",
@@ -14,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default function ProjectsPage() {
-  const projects = getAllContent("projects");
+  const projects = contentRepository.list("projects");
 
   return (
     <>
@@ -23,17 +24,20 @@ export default function ProjectsPage() {
         title="Projects across hardware and software."
         description="PCB design, embedded interfaces, C++ systems, laboratory automation, and bioinformatics algorithms."
       />
-      <section className="mx-auto max-w-7xl px-5 py-16 sm:px-8 sm:py-24">
+      <Container as="section" className="py-16 sm:py-24">
         <div className="space-y-16 sm:space-y-24">
           {projects.map((project, index) => (
             <article key={project.frontmatter.slug} className="grid gap-8 lg:grid-cols-12 lg:items-center">
               <div className={index % 2 === 0 ? "lg:col-span-6" : "lg:order-2 lg:col-span-6"}>
                 <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] border border-border bg-white shadow-sm">
                   <Image
-                    src={project.frontmatter.image}
+                    src={assetUrl(project.frontmatter.cardImage?.src ?? project.frontmatter.image)}
                     alt={project.frontmatter.imageAlt}
                     fill
-                    sizes="(min-width: 1024px) 50vw, 100vw"
+                    sizes="(min-width: 1280px) 608px, (min-width: 1024px) calc(50vw - 4rem), calc(100vw - 2.5rem)"
+                    loading={index === 0 ? "eager" : undefined}
+                    fetchPriority={index === 0 ? "high" : undefined}
+                    decoding={index === 0 ? "sync" : "async"}
                     className="object-cover"
                   />
                 </div>
@@ -49,7 +53,7 @@ export default function ProjectsPage() {
                   <Link href={`/projects/${project.frontmatter.slug}`} className="inline-flex min-h-11 items-center gap-2 text-link hover:underline">
                     Project details <ArrowRight aria-hidden="true" className="size-4" />
                   </Link>
-                  <a href={project.frontmatter.github} target="_blank" rel="noreferrer" className="inline-flex min-h-11 items-center gap-1 text-muted-foreground hover:text-foreground">
+                  <a href={project.frontmatter.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1 text-muted-foreground hover:text-foreground">
                     GitHub <ArrowUpRight aria-hidden="true" className="size-4" />
                   </a>
                 </div>
@@ -57,7 +61,7 @@ export default function ProjectsPage() {
             </article>
           ))}
         </div>
-      </section>
+      </Container>
     </>
   );
 }

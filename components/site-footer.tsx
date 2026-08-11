@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
+import { Container } from "@/components/container";
 import { siteConfig } from "@/config/site";
 
 export function SiteFooter() {
   return (
-    <footer className="border-t border-border bg-surface print:hidden">
-      <div className="mx-auto grid max-w-7xl gap-10 px-5 py-12 sm:px-8 md:grid-cols-[1fr_auto] md:items-end">
+    <footer id="site-footer" className="border-t border-border bg-surface print:hidden">
+      <Container className="grid gap-10 py-12 md:grid-cols-[1fr_auto] md:items-end">
         <div>
           <p className="text-lg font-semibold tracking-[-0.02em]">{siteConfig.name}</p>
           <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
@@ -15,7 +16,7 @@ export function SiteFooter() {
         <div className="grid gap-4 text-sm md:justify-items-end">
           <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
             {siteConfig.nav.map((item) => item.external ? (
-              <a key={item.href} href={item.href} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
                 {item.label}<ArrowUpRight aria-hidden="true" className="size-3.5" />
               </a>
             ) : (
@@ -25,16 +26,16 @@ export function SiteFooter() {
             ))}
           </nav>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <a href={siteConfig.links.github} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+            <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
               GitHub <ArrowUpRight aria-hidden="true" className="size-3.5" />
             </a>
-            <a href={siteConfig.links.linkedin} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+            <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
               LinkedIn <ArrowUpRight aria-hidden="true" className="size-3.5" />
             </a>
           </div>
           <p className="text-xs text-subtle">© {new Date().getFullYear()} {siteConfig.name}.</p>
         </div>
-      </div>
+      </Container>
     </footer>
   );
 }

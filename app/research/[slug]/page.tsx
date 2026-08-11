@@ -3,36 +3,33 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
 import { ContentMeta } from "@/components/content-meta";
+import { Container } from "@/components/container";
 import { MdxContent } from "@/components/mdx-content";
-import { absoluteUrl } from "@/config/site";
-import { getContentEntry, getContentSlugs } from "@/lib/content";
+import { contentRepository } from "@/lib/content";
+import { createContentMetadata } from "@/lib/content-route";
 
 type Props = { params: Promise<{ slug: string }> };
 
 export function generateStaticParams() {
-  return getContentSlugs("research").map((slug) => ({ slug }));
+  return contentRepository.staticParams("research");
 }
+
+export const dynamicParams = false;
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug } = await params;
-  const entry = getContentEntry("research", slug);
-  if (!entry) return { title: "Research not found" };
-  return {
-    title: entry.frontmatter.title,
-    description: entry.frontmatter.summary,
-    alternates: { canonical: absoluteUrl(`/research/${slug}`) },
-  };
+  return createContentMetadata("research", slug);
 }
 
 export default async function ResearchDetailPage({ params }: Props) {
   const { slug } = await params;
-  const entry = getContentEntry("research", slug);
+  const entry = contentRepository.get("research", slug);
   if (!entry) notFound();
 
   return (
     <article>
       <header className="border-b border-border bg-primary text-primary-foreground">
-        <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
+        <Container className="py-14 sm:py-20">
           <Link href="/research" className="inline-flex items-center gap-2 text-sm font-semibold text-primary-foreground/75 hover:text-primary-foreground"><ArrowLeft aria-hidden="true" className="size-4" />All research</Link>
           <p className="mt-10 text-xs font-bold uppercase tracking-[0.14em] text-primary-foreground/55">Research at UC Riverside</p>
           <h1 className="mt-5 max-w-5xl text-balance text-5xl font-semibold tracking-[-0.06em] sm:text-7xl">{entry.frontmatter.title}</h1>
@@ -45,11 +42,11 @@ export default async function ResearchDetailPage({ params }: Props) {
               { label: "Methods and tools", value: entry.frontmatter.tools },
             ]} />
           </div>
-        </div>
+        </Container>
       </header>
-      <div className="mx-auto max-w-7xl px-5 py-14 sm:px-8 sm:py-20">
+      <Container className="py-14 sm:py-20">
         <MdxContent source={entry.source} />
-      </div>
+      </Container>
     </article>
   );
 }

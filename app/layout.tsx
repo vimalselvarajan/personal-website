@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     description: siteConfig.metadata.description,
     images: [absoluteUrl("/opengraph-image")],
   },
-  icons: { icon: "/icon.svg" },
+  icons: { icon: absoluteUrl("/icon.svg") },
 };
 
 export const viewport: Viewport = { colorScheme: "light dark", themeColor: [{ media: "(prefers-color-scheme: light)", color: "#f7f8fa" }, { media: "(prefers-color-scheme: dark)", color: "#17191d" }] };

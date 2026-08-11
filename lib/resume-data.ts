@@ -5,16 +5,51 @@ export type EducationEntry = {
   planned?: boolean;
 };
 
+export type ExperienceId = "brisk-lab" | "sadredini-lab" | "lonardi-lab" | "hastest";
+
+export type ResumeDomain =
+  | "Computer architecture"
+  | "Secure systems"
+  | "Computational genomics"
+  | "Hardware automation";
+
+export type RelatedWorkLink = {
+  label: string;
+  href: `/research/${string}` | `/projects/${string}`;
+};
+
 export type ExperienceEntry = {
+  id: ExperienceId;
+  shortLabel: string;
   organization: string;
   role: string;
   location: string;
   dates: string;
+  kind: "research" | "industry";
+  featuredOnHome: boolean;
+  domains: readonly ResumeDomain[];
+  technologies: readonly string[];
+  relatedWork: RelatedWorkLink;
   highlights: readonly string[];
 };
 
-export type ResumeProject = ExperienceEntry & {
+export type ResumeProject = {
+  id: "mtp-lite" | "hastest-control-suite";
   title: string;
+  organization: string;
+  role: string;
+  location: string;
+  dates: string;
+  experienceId: ExperienceId;
+  technologies: readonly string[];
+  relatedWork: RelatedWorkLink;
+  highlights: readonly string[];
+};
+
+export type SkillGroup = {
+  category: string;
+  items: readonly string[];
+  evidence: readonly ExperienceId[];
 };
 
 export const resumeData = {
@@ -39,10 +74,20 @@ export const resumeData = {
   ] satisfies EducationEntry[],
   experience: [
     {
+      id: "brisk-lab",
+      shortLabel: "Brisk Lab",
       organization: "Brisk Lab, University of California, Riverside",
       role: "Undergraduate Student Researcher — Computer Architecture",
       location: "Riverside, CA",
       dates: "June 2026 – Present",
+      kind: "research",
+      featuredOnHome: true,
+      domains: ["Computer architecture"],
+      technologies: ["C/C++", "Intel XED", "Intel Simics", "MacSim", "Python"],
+      relatedWork: {
+        label: "Explore adaptive cache warming",
+        href: "/research/adaptive-cache-warming",
+      },
       highlights: [
         "Researched and documented an Intel Simics and MacSim integration pipeline using C/C++, Intel XED, and Python for multicore instruction tracing, binary trace generation, and sampled warm-up and detail execution.",
         "Formulated an Adaptive Cache Warming strategy for MacSim using LLC cold-set tracking and optimistic and pessimistic IPC bounds to reduce simulation warm-up overhead.",
@@ -50,10 +95,20 @@ export const resumeData = {
       ],
     },
     {
+      id: "sadredini-lab",
+      shortLabel: "Sadredini Lab",
       organization: "Sadredini Lab, University of California, Riverside",
       role: "Undergraduate Student Researcher — Computer Architecture",
       location: "Riverside, CA",
       dates: "April 2026 – Present",
+      kind: "research",
+      featuredOnHome: true,
+      domains: ["Computer architecture", "Secure systems"],
+      technologies: ["Processing-in-Memory", "Multi-Party Computation", "UPMEM"],
+      relatedWork: {
+        label: "Explore secure processing-in-memory",
+        href: "/research/secure-processing-in-memory",
+      },
       highlights: [
         "Conducted research on secure processing-in-memory systems, studying MPC techniques such as arithmetic secret sharing and garbled circuits for secure computation on untrusted hardware.",
         "Analyzed security and performance trade-offs in PIM architectures, including off-chip data exposure, integrity risks, and CPU bottlenecks in secure-computing protocols.",
@@ -61,10 +116,20 @@ export const resumeData = {
       ],
     },
     {
+      id: "lonardi-lab",
+      shortLabel: "Lonardi Lab",
       organization: "Lonardi Lab, University of California, Riverside",
       role: "Undergraduate Student Researcher — Computational Biology and Bioinformatics",
       location: "Riverside, CA",
       dates: "June 2025 – Present",
+      kind: "research",
+      featuredOnHome: true,
+      domains: ["Computational genomics"],
+      technologies: ["Python", "Jellyfish", "Minimap2", "BWA", "Samtools", "Hifiasm"],
+      relatedWork: {
+        label: "Explore MTP Lite research",
+        href: "/research/optimal-read-selection",
+      },
       highlights: [
         "Conduct research on computational genomics under the supervision of Dr. Stefano Lonardi, focusing on genome assembly optimization and k-mer-based read selection methods.",
         "Optimized AWinK into MTP Lite, decreasing genome assembly fragmentation by 91% without loss in accuracy (99.9% genome fraction and 99.9% sequence identity).",
@@ -72,10 +137,20 @@ export const resumeData = {
       ],
     },
     {
+      id: "hastest",
+      shortLabel: "Hastest",
       organization: "Hastest Solutions, Inc.",
       role: "Software Engineer Intern",
       location: "San Jose, CA",
       dates: "June 2024 – August 2024",
+      kind: "industry",
+      featuredOnHome: false,
+      domains: ["Hardware automation"],
+      technologies: ["Python", "FTDI", "SPI", "Keysight DAQ970A", "PyVISA"],
+      relatedWork: {
+        label: "Explore the control suite",
+        href: "/projects/hastest-control-suite",
+      },
       highlights: [
         "Developed an automated 1,000-hour HTOL validation platform for RF amplifier modules, collecting performance and reliability data across 48 units.",
         "Built Python hardware-control software integrating FTDI/SPI DACs, Keysight DAQ970A instrumentation, and programmable power supplies to automate sequencing, gate-bias regulation, drain-current monitoring, and CSV logging.",
@@ -85,11 +160,18 @@ export const resumeData = {
   ] satisfies ExperienceEntry[],
   projects: [
     {
+      id: "mtp-lite",
       title: "MTP Lite: Proprietary Long-Read Genome Assembly Pipeline",
       organization: "Lonardi Lab, University of California, Riverside",
       role: "Undergraduate Student Researcher — Computational Biology and Bioinformatics",
       location: "Riverside, CA",
       dates: "June 2025 – Present",
+      experienceId: "lonardi-lab",
+      technologies: ["Python", "NumPy", "Bash", "Linux"],
+      relatedWork: {
+        label: "Read the research overview",
+        href: "/research/optimal-read-selection",
+      },
       highlights: [
         "Designed and developed an internal bioinformatics tool for selecting informative long reads for targeted genome assembly.",
         "Implemented scalable read selection, overlap analysis, and assembly-preparation workflows using Python, NumPy, Bash, and Linux tools.",
@@ -97,11 +179,18 @@ export const resumeData = {
       ],
     },
     {
+      id: "hastest-control-suite",
       title: "Hastest DAC, DAQ, and Power Supply Control Suite",
       organization: "Hastest Solutions, Inc.",
       role: "Software Engineer Intern",
       location: "San Jose, CA",
       dates: "June 2024 – August 2024",
+      experienceId: "hastest",
+      technologies: ["Python", "FTDI MPSSE", "SPI", "VISA"],
+      relatedWork: {
+        label: "Read the project details",
+        href: "/projects/hastest-control-suite",
+      },
       highlights: [
         "Designed a five-layer FTDI MPSSE stack enabling register-level bit-field access for a 16-channel DAC/ADC.",
         "Built a full-duplex SPI driver over FTDI MPSSE with configurable chip select, three- and four-wire modes, and dual-port support.",
@@ -110,13 +199,37 @@ export const resumeData = {
     },
   ] satisfies ResumeProject[],
   skills: [
-    { category: "Languages", items: ["Python", "C/C++", "TypeScript", "Java", "SQL", "Bash", "Verilog", "Assembly"] },
-    { category: "Web & databases", items: ["React Native", "Next.js", "Node.js", "Web APIs", "Microsoft SQL Server", "Database indexing"] },
-    { category: "Systems & hardware", items: ["SPI", "I2C", "USB", "TCP/IP", "GPIB", "FTDI", "Linux/Unix", "Altium", "SolidWorks"] },
-    { category: "Computer architecture", items: ["Intel XED", "gem5", "Intel Simics", "Cache and multicore architecture", "Microarchitecture simulation", "In-memory processing", "Multi-party computation"] },
-    { category: "Bioinformatics", items: ["Biopython", "NGS processing", "Genome assembly", "BWA", "Jellyfish", "Samtools", "Hifiasm", "Seqkit"] },
-    { category: "Developer tools", items: ["Git", "CMake", "Make", "GCC", "GDB", "STM32CubeIDE", "PlatformIO", "pytest"] },
-  ],
+    {
+      category: "Languages",
+      items: ["Python", "C/C++", "TypeScript", "Java", "SQL", "Bash", "Verilog", "Assembly"],
+      evidence: ["brisk-lab", "lonardi-lab", "hastest"],
+    },
+    {
+      category: "Web & databases",
+      items: ["React Native", "Next.js", "Node.js", "Web APIs", "Microsoft SQL Server", "Database indexing"],
+      evidence: [],
+    },
+    {
+      category: "Systems & hardware",
+      items: ["SPI", "I2C", "USB", "TCP/IP", "GPIB", "FTDI", "Linux/Unix", "Altium", "SolidWorks"],
+      evidence: ["hastest"],
+    },
+    {
+      category: "Computer architecture",
+      items: ["Intel XED", "gem5", "Intel Simics", "Cache and multicore architecture", "Microarchitecture simulation", "In-memory processing", "Multi-party computation"],
+      evidence: ["brisk-lab", "sadredini-lab"],
+    },
+    {
+      category: "Bioinformatics",
+      items: ["Biopython", "NGS processing", "Genome assembly", "BWA", "Jellyfish", "Samtools", "Hifiasm", "Seqkit"],
+      evidence: ["lonardi-lab"],
+    },
+    {
+      category: "Developer tools",
+      items: ["Git", "CMake", "Make", "GCC", "GDB", "STM32CubeIDE", "PlatformIO", "pytest"],
+      evidence: ["brisk-lab", "lonardi-lab", "hastest"],
+    },
+  ] satisfies SkillGroup[],
   presentation: {
     title: "Genome Assembly Optimization Using k-mer-Based Read Selection",
     date: "April 2026",
@@ -125,3 +238,6 @@ export const resumeData = {
     role: "Selected Presenter",
   },
 } as const;
+
+export const researchExperience = resumeData.experience.filter((experience) => experience.kind === "research");
+export const featuredExperience = resumeData.experience.filter((experience) => experience.featuredOnHome);

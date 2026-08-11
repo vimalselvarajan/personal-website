@@ -13,6 +13,7 @@ export type ExternalNavItem = {
 export type NavItem = InternalNavItem | ExternalNavItem;
 
 const portfolioUrl = "https://vimalselvarajan.github.io/Personal-Website";
+export const productionBasePath = "/Personal-Website";
 
 export const siteConfig = {
   name: "Vimal Selvarajan",
@@ -37,21 +38,22 @@ export const siteConfig = {
       "Vimal Selvarajan's work in computer architecture, secure systems, computational genomics, embedded hardware, and software engineering at UC Riverside.",
     baseUrl: portfolioUrl,
   },
-  featured: {
-    projectSlug: "12v-to-3v3-buck-converter",
-    researchSlug: "optimal-read-selection",
-  },
   nav: [
     { label: "Home", href: "/", external: false },
     { label: "Projects", href: "/projects", external: false },
     { label: "Research", href: "/research", external: false },
-    { label: "About", href: "/about", external: false },
     { label: "Résumé", href: "/resume", external: false },
   ] satisfies NavItem[],
 } as const;
 
 export function absoluteUrl(path = "") {
   return `${siteConfig.metadata.baseUrl}${path}`;
+}
+
+export function assetUrl(path: string) {
+  if (!path.startsWith("/")) throw new Error(`Asset paths must start with "/": ${path}`);
+  const basePath = process.env.NODE_ENV === "production" ? (process.env.PAGES_BASE_PATH ?? productionBasePath) : "";
+  return `${basePath}${path}`;
 }
 
 export type SiteConfig = typeof siteConfig;

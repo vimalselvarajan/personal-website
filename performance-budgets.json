@@ -1,0 +1,10 @@
+{
+  "maxIncreasePercent": 5,
+  "clientJavaScript": {
+    "home": { "html": "index.html", "baselineGzipBytes": 194011 },
+    "projects": { "html": "projects/index.html", "baselineGzipBytes": 194011 },
+    "projectDetail": { "html": "projects/12v-to-3v3-buck-converter/index.html", "baselineGzipBytes": 194011 },
+    "researchDetail": { "html": "research/optimal-read-selection/index.html", "baselineGzipBytes": 188497 },
+    "resume": { "html": "resume/index.html", "baselineGzipBytes": 194729 }
+  }
+}
