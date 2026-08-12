@@ -3,22 +3,22 @@ import Link from "next/link";
 import { ArrowRight, FlaskConical } from "lucide-react";
 import { Container } from "@/components/container";
 import { Badge } from "@/components/ui/badge";
-import { absoluteUrl } from "@/config/site";
 import { contentRepository } from "@/lib/content";
+import { createPageMetadata } from "@/lib/metadata";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
+  path: "/research",
   title: "Research",
   description: "Vimal Selvarajan's UC Riverside research in computer architecture, secure processing-in-memory systems, and computational genomics.",
-  alternates: { canonical: absoluteUrl("/research") },
-};
+});
 
 export default function ResearchPage() {
   const entries = contentRepository.list("research");
 
   return (
-    <section className="border-y border-border bg-surface">
+    <section aria-labelledby="research-page-heading" className="border-y border-border bg-surface">
       <Container className="py-16 sm:py-24">
-        <div className="flex items-center gap-3"><FlaskConical aria-hidden="true" className="size-5 text-link" /><h1 className="eyebrow">Research areas</h1></div>
+        <div className="flex items-center gap-3"><FlaskConical aria-hidden="true" className="size-5 text-link" /><h1 id="research-page-heading" className="eyebrow">Research areas</h1></div>
         <div className="mt-10 divide-y divide-border border-y border-border">
           {entries.map((research) => (
             <article key={research.frontmatter.slug} className="grid gap-8 py-10 lg:grid-cols-[1fr_20rem] lg:items-start">

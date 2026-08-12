@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/container";
+import { ExternalAnchor } from "@/components/external-link";
 import { siteConfig } from "@/config/site";
 
 export function SiteFooter() {
@@ -15,10 +16,10 @@ export function SiteFooter() {
         </div>
         <div className="grid gap-4 text-sm md:justify-items-end">
           <nav aria-label="Footer" className="flex flex-wrap gap-x-5 gap-y-2">
-            {siteConfig.nav.map((item) => item.external ? (
-              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+            {siteConfig.footerNav.map((item) => item.external ? (
+              <ExternalAnchor key={item.href} href={item.href} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
                 {item.label}<ArrowUpRight aria-hidden="true" className="size-3.5" />
-              </a>
+              </ExternalAnchor>
             ) : (
               <Link key={item.href} href={item.href} className="text-muted-foreground hover:text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
                 {item.label}
@@ -26,12 +27,12 @@ export function SiteFooter() {
             ))}
           </nav>
           <div className="flex flex-wrap gap-x-5 gap-y-2">
-            <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+            <ExternalAnchor href={siteConfig.links.github} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
               GitHub <ArrowUpRight aria-hidden="true" className="size-3.5" />
-            </a>
-            <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
+            </ExternalAnchor>
+            <ExternalAnchor href={siteConfig.links.linkedin} className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground">
               LinkedIn <ArrowUpRight aria-hidden="true" className="size-3.5" />
-            </a>
+            </ExternalAnchor>
           </div>
           <p className="text-xs text-subtle">© {new Date().getFullYear()} {siteConfig.name}.</p>
         </div>

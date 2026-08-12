@@ -21,7 +21,11 @@ function describeError(error: unknown, file: string) {
   return new Error(`Invalid front matter in ${file}: ${details}`);
 }
 
-function assertUnique<K extends ContentKind>(entries: readonly ContentEntry<K>[], field: "slug" | "order", kind: K) {
+function assertUnique<K extends ContentKind>(
+  entries: readonly ContentEntry<K>[],
+  field: "slug" | "order" | "summary",
+  kind: K,
+) {
   const seen = new Set<string | number>();
   for (const entry of entries) {
     const value = entry.frontmatter[field];
@@ -39,7 +43,7 @@ export function createContentRepository({ contentRoot, publicRoot }: RepositoryO
 
     const directory = path.join(contentRoot, kind);
     const entries = fs.readdirSync(directory)
-      .filter((file) => file.endsWith(".mdx"))
+      .filter((file) => file.endsWith(".md"))
       .sort()
       .map((filename) => {
         const file = path.join(directory, filename);
@@ -51,7 +55,7 @@ export function createContentRepository({ contentRoot, publicRoot }: RepositoryO
           throw describeError(error, file);
         }
 
-        const filenameSlug = filename.replace(/\.mdx$/, "");
+        const filenameSlug = filename.replace(/\.md$/, "");
         if (frontmatter.slug !== filenameSlug) {
           throw new Error(`Front matter slug "${frontmatter.slug}" must match filename "${filenameSlug}" in ${file}`);
         }
@@ -78,8 +82,7 @@ export function createContentRepository({ contentRoot, publicRoot }: RepositoryO
 
     assertUnique(entries, "slug", kind);
     assertUnique(entries, "order", kind);
-    const featured = entries.filter((entry) => entry.frontmatter.featured);
-    if (featured.length !== 1) throw new Error(`Expected exactly one featured ${kind} entry; found ${featured.length}`);
+    if (kind === "projects") assertUnique(entries, "summary", kind);
 
     cache.set(kind, entries as readonly ContentEntry<ContentKind>[]);
     return entries;
@@ -91,9 +94,6 @@ export function createContentRepository({ contentRoot, publicRoot }: RepositoryO
     },
     get<K extends ContentKind>(kind: K, slug: string): ContentEntry<K> | null {
       return load(kind).find((entry) => entry.frontmatter.slug === slug) ?? null;
-    },
-    getFeatured<K extends ContentKind>(kind: K): ContentEntry<K> {
-      return load(kind).find((entry) => entry.frontmatter.featured)!;
     },
     staticParams(kind: ContentKind): Array<{ slug: string }> {
       return load(kind).map((entry) => ({ slug: entry.frontmatter.slug }));

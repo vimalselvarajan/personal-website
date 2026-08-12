@@ -1,86 +1,97 @@
 # Vimal Selvarajan — Portfolio
 
-A Next.js portfolio for Vimal Selvarajan, a computer science student and undergraduate researcher at the University of California, Riverside working across computer architecture, secure systems, computational genomics, embedded hardware, and software engineering.
+A statically exported Next.js portfolio for Vimal Selvarajan, a UC Riverside computer science student and undergraduate researcher working across computer architecture, secure systems, computational genomics, embedded hardware, and software engineering.
 
-## Stack
+## Production baseline
 
-- Next.js App Router and React Server Components
-- Strict TypeScript and Tailwind CSS
-- Local MDX content with validated front matter
-- `next/image` for the five local project assets
-- Lucide icons, ESLint, Playwright, and `next-themes`
+- Next.js 16.3 App Router and React 19 Server Components
+- Node 24.19.0 LTS with npm 11.17.0, enforced exactly at install and validation time
+- TypeScript 7.0.2 CLI checking with the supported TypeScript 6 compatibility API for ESLint
+- ESLint 10, Vitest with V8 coverage, Playwright, axe, and three-run Lighthouse budgets
+- Repository-authored Markdown rendered without raw HTML or JSX execution
+- Static export for the `/Personal-Website` GitHub Pages base path
+- Responsive profile and project assets with committed format, dimension, and size budgets
 
 ## Local development
 
+Install the exact runtime from `.nvmrc` before installing dependencies:
+
 ```bash
-npm install
+nvm install
+nvm use
+npm ci
 npm run dev
 ```
 
-Open `http://localhost:3000`.
+Open `http://localhost:3000`. Installs fail deliberately when Node or npm differs from the pinned toolchain.
+
+The primary local gates are:
 
 ```bash
-npm run lint
-npm run typecheck
-npm test
-npm run build
-npm run test:bundle
-```
-
-The production build is a static export mounted locally at `/Personal-Website`. Browser tests manage the export server automatically:
-
-```bash
-npx playwright install
+npm run validate
 npm run test:e2e
+npm run test:lighthouse
 ```
 
-Run `npm run test:lighthouse` after a build for the three-run mobile performance budgets. `npm run analyze` creates the optional webpack bundle report; normal development and production builds use Turbopack.
+`npm run validate` checks the toolchain, ESLint, TypeScript, coverage, responsive assets, the production export, and bundle/image budgets. `npm run test:e2e` builds once and tests that export across Chromium desktop/mobile, Firefox, and WebKit. `npm run test:e2e:export` reuses an existing `out/` directory. Lighthouse also reuses `out/` and serves it on an isolated ephemeral port.
+
+Use `npm run assets:generate` only when the source portrait or project artwork intentionally changes; `npm run assets:check` verifies all 12 profile outputs and 47 project outputs (17 detail WebP, 15 listing-card AVIF, and 15 listing-card WebP files).
 
 ## Content map
 
 | Content | Location |
 | --- | --- |
-| Identity, links, navigation, and metadata | `config/site.ts` |
-| Project entries | `content/projects/*.mdx` |
-| Research entries | `content/research/*.mdx` |
+| Identity, links, navigation, production URL, and base path | `config/site.ts` |
+| Project entries | `content/projects/*.md` |
+| Research entries | `content/research/*.md` |
 | Résumé data | `lib/resume-data.ts` |
-| Project images | `public/projects/` |
-| Project and research schemas/repository | `lib/content-schema.ts`, `lib/content.ts` |
-| Social preview | `app/opengraph-image.tsx` |
+| Project source images | `public/projects/` |
+| Responsive profile and project images | `public/profile/`, `public/projects/responsive/` |
+| Content schemas and repository | `lib/content-schema.ts`, `lib/content.ts` |
+| Route and link validation | `lib/routes.ts`, `lib/site-routes.ts`, `lib/links.ts` |
+| Shared route metadata | `lib/metadata.ts` |
+| Social preview | `public/social-preview.png` |
 
-The résumé is rendered as a native, print-friendly page at `/resume`. Shared résumé data lives in `lib/resume-data.ts` and is also used by the home and about pages.
+Content is trusted and repository-authored, but it is still rendered as Markdown only: raw HTML and JSX are not executed. Internal content links must resolve to generated routes. External links must be valid HTTPS URLs; protocol-relative, HTTP, executable, credential-bearing, malformed, encoded-control, and control-character URLs are rejected.
 
-## Project front matter
+### Project front matter
 
 Each project filename must match its `slug`. Required fields are:
 
-- `title`, `slug`, `summary`, `featured`, and numeric `order`
-- `stack` and `github`
+- `title`, `slug`, `summary`, and numeric `order`
+- `stack` and an HTTPS `github` URL
 - `image`, `imageAlt`, `imageWidth`, and `imageHeight`
 
-An optional `cardImage` object (`src`, `width`, and `height`) can provide a smaller, pre-cropped listing image. If omitted, cards use the primary image.
+An optional `cardImage` object (`src`, `width`, and `height`) can provide a smaller listing image. Project summaries must be unique. Projects are displayed by `order`, not filename.
 
-Projects are displayed by `order`, not filename. Add PNG, JPEG, or WebP images under `public/projects/` and record their intrinsic dimensions to prevent layout shift.
-
-## Research front matter
+### Research front matter
 
 Each research filename must match its `slug`. Required fields are:
 
-- `title`, `slug`, `summary`, `featured`, and numeric `order`
+- `title`, `slug`, `summary`, and numeric `order`
 - `status`, `researchArea`, `tools`, and `affiliation`
 
-The site combines project content with the current information in `RESUME.md`. The Combat Chess description is retained from the previous portfolio even though it duplicates the buck-converter description.
+Markdown tables receive a keyboard-focusable horizontal reflow wrapper on narrow screens.
 
-## Architecture notes
+## Architecture and deployment
 
-- Pages are server-rendered or statically generated by default.
-- Client JavaScript is limited to navigation and theme selection.
-- Dynamic project and research routes use `generateStaticParams`, `dynamicParams = false`, route metadata, and `notFound()`.
-- The sitemap derives detail URLs from the MDX filenames.
-- Theme preference supports system, light, and dark modes and respects reduced motion.
-- GitHub Actions runs lint, types, unit tests, bundle budgets, Playwright across Chromium/Firefox/WebKit, axe, Lighthouse, and the Pages deployment.
-- The audit record and maintenance rules live in `docs/codebase-audit.md`.
+- Pages are Server Components unless interaction requires a client boundary.
+- The résumé timeline remains a client component to preserve active-card behavior.
+- Dynamic detail routes use `generateStaticParams`, `dynamicParams = false`, generated `Route` types, and `notFound()`.
+- Navigation, sitemap entries, résumé related-work links, Markdown links, and content assets are validated from canonical repositories.
+- Every route emits its own canonical URL, title, description, Open Graph URL/image fields, and Twitter card fields.
+- Pushes to `main` validate one static export and deploy that same `out/` artifact to GitHub Pages.
 
-## Deployment
+## Repository-owner checklist
 
-Pushes to `main` produce a static export and deploy `out/` to the GitHub Pages project path `/Personal-Website`. The workflow smoke-tests every sitemap route plus robots, sitemap, icon, social image, and a project image after deployment.
+The repository has no configured remote in this workspace, so settings-level controls cannot be changed here. The owner should:
+
+- enable secret scanning and push protection;
+- protect `main` and require the quality, dependency-review, and CodeQL checks;
+- require pull-request review and dismiss stale approvals;
+- restrict GitHub Actions to approved, full-SHA-pinned actions; and
+- periodically confirm the Pages environment protection and deployment source.
+
+GitHub Pages controls production response headers. The current published Pages origin returns HSTS, but repository-defined CSP, `X-Content-Type-Options`, `Referrer-Policy`, frame, and permissions headers are unavailable on this host. That limitation is accepted for this public static site because it has no authentication, forms, APIs, cookies, analytics, or sensitive runtime data. The remediated export, including the new social and responsive assets, has not been deployed from this workspace because no remote is configured; the tracked deployment smoke checks remain pending until the next deployment.
+
+No analytics or real-user monitoring is collected, so field INP data is unavailable. Three-run CI Lighthouse medians remain the enforced performance proxy. See `docs/codebase-audit.md` for the verification evidence, accepted constraints, and maintenance record.

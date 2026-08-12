@@ -1,0 +1,45 @@
+{
+  "audits": {
+    "image-delivery-insight": {
+      "id": "image-delivery-insight",
+      "score": 0.75,
+      "details": {
+        "type": "table",
+        "items": [
+          {
+            "url": "https://portfolio.invalid/profile.jpg",
+            "totalBytes": 200000,
+            "wastedBytes": 120000,
+            "subItems": {
+              "type": "subitems",
+              "items": [
+                {
+                  "reason": "This image file is larger than it needs to be (1024x768) for its displayed dimensions (384x288). Use responsive images to reduce the image download size.",
+                  "wastedBytes": 100000
+                },
+                {
+                  "reason": "Increasing the image compression factor could improve this image's download size.",
+                  "wastedBytes": 20000
+                }
+              ]
+            }
+          },
+          {
+            "url": "https://portfolio.invalid/project.jpg",
+            "totalBytes": 100000,
+            "wastedBytes": 30000,
+            "subItems": {
+              "type": "subitems",
+              "items": [
+                {
+                  "reason": "Using a modern image format (WebP, AVIF) or increasing the image compression could improve this image's download size.",
+                  "wastedBytes": 30000
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+}

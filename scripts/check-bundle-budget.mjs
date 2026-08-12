@@ -25,4 +25,17 @@ for (const [route, budget] of Object.entries(budgets.clientJavaScript)) {
   if (!passed) failed = true;
 }
 
+for (const file of budgets.responsiveImages.files) {
+  const absoluteFile = path.join(outputRoot, file);
+  if (!fs.existsSync(absoluteFile)) {
+    console.log(`FAIL /${file}: missing from static export`);
+    failed = true;
+    continue;
+  }
+  const bytes = fs.statSync(absoluteFile).size;
+  const passed = bytes <= budgets.responsiveImages.maximumBytes;
+  console.log(`${passed ? "PASS" : "FAIL"} /${file}: ${bytes} bytes (budget ${budgets.responsiveImages.maximumBytes})`);
+  if (!passed) failed = true;
+}
+
 if (failed) process.exitCode = 1;

@@ -6,5 +6,22 @@
     "projectDetail": { "html": "projects/12v-to-3v3-buck-converter/index.html", "baselineGzipBytes": 194011 },
     "researchDetail": { "html": "research/optimal-read-selection/index.html", "baselineGzipBytes": 188497 },
     "resume": { "html": "resume/index.html", "baselineGzipBytes": 194729 }
+  },
+  "responsiveImages": {
+    "maximumBytes": 122880,
+    "files": [
+      "profile/profile-384.avif",
+      "profile/profile-384.webp",
+      "profile/profile-384.jpg",
+      "profile/profile-640.avif",
+      "profile/profile-640.webp",
+      "profile/profile-640.jpg",
+      "profile/profile-768.avif",
+      "profile/profile-768.webp",
+      "profile/profile-768.jpg",
+      "profile/profile-1024.avif",
+      "profile/profile-1024.webp",
+      "profile/profile-1024.jpg"
+    ]
   }
 }

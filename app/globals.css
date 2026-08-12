@@ -52,6 +52,7 @@
 
 * { border-color: var(--border); }
 html { scroll-padding-top: 5.5rem; }
+main { min-width: 0; }
 body {
   margin: 0;
   background: var(--background);
@@ -59,6 +60,7 @@ body {
   font-family: var(--font-sans);
   text-rendering: optimizeLegibility;
 }
+h1, h2, h3 { overflow-wrap: anywhere; }
 ::selection { background: color-mix(in oklab, var(--link) 25%, transparent); }
 a, button { -webkit-tap-highlight-color: transparent; }
 body:has([data-landing-only]) #site-footer { display: none; }
@@ -79,6 +81,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   font-weight: 700;
 }
 .skip-link:focus { transform: translateY(0); }
+#mobile-navigation {
+  max-height: calc(100svh - 4rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
 .eyebrow {
   font-size: 0.75rem;
   font-weight: 750;
@@ -86,15 +94,6 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   line-height: 1.4;
   text-transform: uppercase;
   color: var(--link);
-}
-.visual-grid::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  opacity: 0.35;
-  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 32px 32px;
-  mask-image: linear-gradient(to bottom, black, transparent 90%);
 }
 .resume-signal-grid {
   opacity: 0.3;
@@ -114,9 +113,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
     box-shadow: 0 24px 60px -44px var(--link);
   }
 }
-.prose-portfolio { color: var(--muted-foreground); font-size: 1.04rem; line-height: 1.8; }
+.prose-portfolio { min-width: 0; overflow-wrap: anywhere; color: var(--muted-foreground); font-size: 1.04rem; line-height: 1.8; }
 .prose-portfolio > * { max-width: 46rem; }
-.prose-portfolio > .visual-grid { max-width: none; }
 .prose-portfolio h2, .prose-portfolio h3 {
   color: var(--foreground);
   font-weight: 650;
@@ -135,9 +133,47 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .prose-portfolio blockquote { margin: 2rem 0; border-left: 3px solid var(--link); padding-left: 1.25rem; color: var(--foreground); }
 .prose-portfolio pre { margin: 2rem 0; overflow-x: auto; border: 1px solid var(--border); border-radius: 1rem; background: oklch(0.16 0.015 255); padding: 1.25rem; color: oklch(0.92 0.025 245); font-size: 0.875rem; line-height: 1.65; }
 .prose-portfolio :not(pre) > code { border: 1px solid var(--border); border-radius: 0.35rem; background: var(--muted); padding: 0.1rem 0.35rem; color: var(--foreground); font-size: 0.9em; }
-.prose-portfolio table { margin: 2rem 0; width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+.prose-portfolio .table-scroll {
+  margin: 2rem 0;
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  scrollbar-gutter: stable;
+}
+.prose-portfolio .table-scroll:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 3px;
+}
+.prose-portfolio table { width: max-content; min-width: 100%; border-collapse: collapse; font-size: 0.9rem; }
 .prose-portfolio th, .prose-portfolio td { border-bottom: 1px solid var(--border); padding: 0.75rem; text-align: left; }
 .prose-portfolio th { color: var(--foreground); font-weight: 650; }
+.prose-portfolio .table-scroll th,
+.prose-portfolio .table-scroll td {
+  overflow-wrap: normal;
+  vertical-align: top;
+}
+
+@media (forced-colors: active) {
+  a {
+    text-decoration: underline;
+  }
+  button,
+  [role="button"],
+  .skip-link {
+    border: 1px solid ButtonText;
+  }
+  .skip-link {
+    background: Canvas;
+    color: CanvasText;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  summary:focus-visible,
+  .prose-portfolio .table-scroll:focus-visible {
+    outline: 3px solid Highlight;
+    outline-offset: 3px;
+  }
+}
 
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

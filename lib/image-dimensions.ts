@@ -23,7 +23,7 @@ export function readImageDimensions(buffer: Buffer, file: string): ImageDimensio
 
       const segmentLength = buffer.readUInt16BE(offset);
       if (segmentLength < 2 || offset + segmentLength > buffer.length) break;
-      if (jpegStartOfFrameMarkers.has(marker)) {
+      if (marker !== undefined && jpegStartOfFrameMarkers.has(marker)) {
         return { height: buffer.readUInt16BE(offset + 3), width: buffer.readUInt16BE(offset + 5) };
       }
       offset += segmentLength;

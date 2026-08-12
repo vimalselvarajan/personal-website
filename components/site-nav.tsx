@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { ArrowUpRight, Menu, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { NavItem } from "@/config/site";
+import { ExternalAnchor } from "@/components/external-link";
 import { Button } from "@/components/ui/button";
 import { ThemeToggle } from "@/components/theme-toggle";
 import { cn } from "@/lib/utils";
@@ -55,9 +56,9 @@ export function SiteNav({ items }: SiteNavProps) {
           );
 
           return item.external ? (
-            <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" className={cn(className, "inline-flex items-center gap-1")}>
+            <ExternalAnchor key={item.href} href={item.href} className={cn(className, "inline-flex items-center gap-1")}>
               {item.label}<ArrowUpRight aria-hidden="true" className="size-3.5" />
-            </a>
+            </ExternalAnchor>
           ) : (
             <Link key={item.href} href={item.href} aria-current={isCurrent(pathname, item.href) ? "page" : undefined} className={className}>
               {item.label}
@@ -97,9 +98,9 @@ export function SiteNav({ items }: SiteNavProps) {
             );
 
             return item.external ? (
-              <a key={item.href} href={item.href} target="_blank" rel="noopener noreferrer" onClick={() => setOpen(false)} className="flex items-center justify-between">
+              <ExternalAnchor key={item.href} href={item.href} onClick={() => setOpen(false)} className="flex items-center justify-between">
                 <span className={cn(className, "w-full gap-2")}>{item.label}<ArrowUpRight aria-hidden="true" className="size-4" /></span>
-              </a>
+              </ExternalAnchor>
             ) : (
               <Link key={item.href} href={item.href} aria-current={isCurrent(pathname, item.href) ? "page" : undefined} onClick={() => setOpen(false)} className={className}>
                 {item.label}

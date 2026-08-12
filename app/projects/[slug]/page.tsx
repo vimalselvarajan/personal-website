@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ContentMeta } from "@/components/content-meta";
 import { Container } from "@/components/container";
 import { ExternalLink } from "@/components/external-link";
-import { MdxContent } from "@/components/mdx-content";
-import { assetUrl } from "@/config/site";
+import { MarkdownContent } from "@/components/markdown-content";
+import { ProjectDetailImage } from "@/components/project-detail-image";
 import { contentRepository } from "@/lib/content";
 import { createContentMetadata } from "@/lib/content-route";
+import { contentRoute } from "@/lib/routes";
 
 type Props = { params: Promise<{ slug: string }> };
 
@@ -47,16 +47,9 @@ export default async function ProjectDetailPage({ params }: Props) {
       </header>
       <Container className="py-14 sm:py-20">
         <div className="mb-14 overflow-hidden rounded-[2rem] border border-border bg-white p-2 sm:p-4">
-          <Image
-            src={assetUrl(entry.frontmatter.image)}
-            alt={entry.frontmatter.imageAlt}
-            width={entry.frontmatter.imageWidth}
-            height={entry.frontmatter.imageHeight}
-            sizes="(min-width: 1280px) 1152px, 100vw"
-            className="mx-auto max-h-[42rem] h-auto w-auto max-w-full rounded-2xl object-contain"
-          />
+          <ProjectDetailImage {...entry.frontmatter} />
         </div>
-        <MdxContent source={entry.source} />
+        <MarkdownContent source={entry.source} route={contentRoute("projects", slug)} />
         <div className="mt-16 border-t border-border pt-8 text-sm font-semibold"><ExternalLink href={entry.frontmatter.github}>View project on GitHub</ExternalLink></div>
         <nav aria-label="Project pagination" className="mt-16 grid gap-4 border-t border-border pt-8 sm:grid-cols-2">
           <div>{previous ? <Link href={`/projects/${previous.frontmatter.slug}`} className="group block rounded-2xl border border-border p-5 hover:bg-muted"><span className="text-xs text-subtle">Previous project</span><span className="mt-2 flex items-center gap-2 font-semibold"><ArrowLeft aria-hidden="true" className="size-4" />{previous.frontmatter.title}</span></Link> : null}</div>

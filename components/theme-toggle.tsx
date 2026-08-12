@@ -18,7 +18,7 @@ export function ThemeToggle() {
   const current = themeOrder.includes(theme as (typeof themeOrder)[number])
     ? (theme as (typeof themeOrder)[number])
     : "system";
-  const next = themeOrder[(themeOrder.indexOf(current) + 1) % themeOrder.length];
+  const next = themeOrder[(themeOrder.indexOf(current) + 1) % themeOrder.length] ?? "system";
   const label = mounted ? `Theme: ${current}. Switch to ${next}.` : "Choose color theme";
 
   return (

@@ -1,6 +1,8 @@
+import type { Route } from "next";
+
 export type InternalNavItem = {
   label: string;
-  href: `/${string}` | "/";
+  href: Route;
   external: false;
 };
 
@@ -12,8 +14,8 @@ export type ExternalNavItem = {
 
 export type NavItem = InternalNavItem | ExternalNavItem;
 
-const portfolioUrl = "https://vimalselvarajan.github.io/Personal-Website";
-export const productionBasePath = "/Personal-Website";
+export const portfolioUrl = "https://vimalselvarajan.github.io/Personal-Website";
+export const productionBasePath = new URL(portfolioUrl).pathname.replace(/\/$/, "");
 
 export const siteConfig = {
   name: "Vimal Selvarajan",
@@ -44,16 +46,25 @@ export const siteConfig = {
     { label: "Research", href: "/research", external: false },
     { label: "Résumé", href: "/resume", external: false },
   ] satisfies NavItem[],
+  footerNav: [
+    { label: "Home", href: "/", external: false },
+    { label: "Projects", href: "/projects", external: false },
+    { label: "Research", href: "/research", external: false },
+    { label: "About", href: "/about", external: false },
+    { label: "R\u00e9sum\u00e9", href: "/resume", external: false },
+  ] satisfies NavItem[],
 } as const;
 
 export function absoluteUrl(path = "") {
   return `${siteConfig.metadata.baseUrl}${path}`;
 }
 
-export function assetUrl(path: string) {
-  if (!path.startsWith("/")) throw new Error(`Asset paths must start with "/": ${path}`);
-  const basePath = process.env.NODE_ENV === "production" ? (process.env.PAGES_BASE_PATH ?? productionBasePath) : "";
-  return `${basePath}${path}`;
+export function canonicalUrl<T extends string>(path: Route<T>) {
+  return absoluteUrl(path === "/" ? "/" : `${path.replace(/\/+$/, "")}/`);
 }
 
-export type SiteConfig = typeof siteConfig;
+export function assetUrl(path: string) {
+  if (!path.startsWith("/")) throw new Error(`Asset paths must start with "/": ${path}`);
+  const basePath = process.env.NODE_ENV === "production" ? productionBasePath : "";
+  return `${basePath}${path}`;
+}

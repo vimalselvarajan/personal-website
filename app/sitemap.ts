@@ -1,19 +1,13 @@
 import type { MetadataRoute } from "next";
-import { absoluteUrl } from "@/config/site";
-import { contentRepository } from "@/lib/content";
+import { canonicalUrl } from "@/config/site";
+import { getSiteRoutes } from "@/lib/site-routes";
 
 export const dynamic = "force-static";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const staticPaths = ["", "/projects", "/research", "/about", "/resume"];
-  const dynamicPaths = [
-    ...contentRepository.staticParams("projects").map(({ slug }) => `/projects/${slug}`),
-    ...contentRepository.staticParams("research").map(({ slug }) => `/research/${slug}`),
-  ];
-
-  return [...staticPaths, ...dynamicPaths].map((route) => ({
-    url: absoluteUrl(route),
-    changeFrequency: route === "" ? "monthly" : "yearly",
-    priority: route === "" ? 1 : 0.7,
+  return getSiteRoutes().map((route) => ({
+    url: canonicalUrl(route),
+    changeFrequency: route === "/" ? "monthly" : "yearly",
+    priority: route === "/" ? 1 : 0.7,
   }));
 }

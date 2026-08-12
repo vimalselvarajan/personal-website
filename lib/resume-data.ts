@@ -1,3 +1,5 @@
+import type { Route } from "next";
+
 export type EducationEntry = {
   degree: string;
   school: string;
@@ -15,7 +17,7 @@ export type ResumeDomain =
 
 export type RelatedWorkLink = {
   label: string;
-  href: `/research/${string}` | `/projects/${string}`;
+  href: Route<`/projects/${string}` | `/research/${string}`>;
 };
 
 export type ExperienceEntry = {
@@ -26,7 +28,6 @@ export type ExperienceEntry = {
   location: string;
   dates: string;
   kind: "research" | "industry";
-  featuredOnHome: boolean;
   domains: readonly ResumeDomain[];
   technologies: readonly string[];
   relatedWork: RelatedWorkLink;
@@ -81,7 +82,6 @@ export const resumeData = {
       location: "Riverside, CA",
       dates: "June 2026 – Present",
       kind: "research",
-      featuredOnHome: true,
       domains: ["Computer architecture"],
       technologies: ["C/C++", "Intel XED", "Intel Simics", "MacSim", "Python"],
       relatedWork: {
@@ -102,7 +102,6 @@ export const resumeData = {
       location: "Riverside, CA",
       dates: "April 2026 – Present",
       kind: "research",
-      featuredOnHome: true,
       domains: ["Computer architecture", "Secure systems"],
       technologies: ["Processing-in-Memory", "Multi-Party Computation", "UPMEM"],
       relatedWork: {
@@ -123,7 +122,6 @@ export const resumeData = {
       location: "Riverside, CA",
       dates: "June 2025 – Present",
       kind: "research",
-      featuredOnHome: true,
       domains: ["Computational genomics"],
       technologies: ["Python", "Jellyfish", "Minimap2", "BWA", "Samtools", "Hifiasm"],
       relatedWork: {
@@ -144,7 +142,6 @@ export const resumeData = {
       location: "San Jose, CA",
       dates: "June 2024 – August 2024",
       kind: "industry",
-      featuredOnHome: false,
       domains: ["Hardware automation"],
       technologies: ["Python", "FTDI", "SPI", "Keysight DAQ970A", "PyVISA"],
       relatedWork: {
@@ -240,4 +237,3 @@ export const resumeData = {
 } as const;
 
 export const researchExperience = resumeData.experience.filter((experience) => experience.kind === "research");
-export const featuredExperience = resumeData.experience.filter((experience) => experience.featuredOnHome);

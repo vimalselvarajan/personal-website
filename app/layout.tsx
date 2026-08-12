@@ -4,26 +4,19 @@ import { absoluteUrl, siteConfig } from "@/config/site";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
+import { createPageMetadata } from "@/lib/metadata";
+import { validateSiteRouteReferences } from "@/lib/site-routes";
+
+validateSiteRouteReferences();
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteConfig.metadata.baseUrl),
+  ...createPageMetadata({
+    path: "/",
+    title: siteConfig.metadata.title,
+    description: siteConfig.metadata.description,
+  }),
   title: { default: siteConfig.metadata.title, template: `%s — ${siteConfig.name}` },
-  description: siteConfig.metadata.description,
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    url: absoluteUrl(),
-    title: siteConfig.metadata.title,
-    description: siteConfig.metadata.description,
-    siteName: siteConfig.name,
-    images: [{ url: absoluteUrl("/opengraph-image"), width: 1200, height: 630, alt: `${siteConfig.name} portfolio preview` }],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: siteConfig.metadata.title,
-    description: siteConfig.metadata.description,
-    images: [absoluteUrl("/opengraph-image")],
-  },
   icons: { icon: absoluteUrl("/icon.svg") },
 };
 
@@ -36,7 +29,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <a href="#main-content" className="skip-link">Skip to content</a>
           <SiteHeader />
-          <main id="main-content">{children}</main>
+          <main id="main-content" tabIndex={-1}>{children}</main>
           <SiteFooter />
         </ThemeProvider>
       </body>

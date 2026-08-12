@@ -17,7 +17,6 @@ const commonFrontmatterSchema = z.object({
   title: nonEmptyString,
   slug,
   summary: nonEmptyString,
-  featured: z.boolean(),
   order: positiveInteger,
 });
 

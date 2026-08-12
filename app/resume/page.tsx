@@ -2,16 +2,18 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, GraduationCap, Mail, MapPin, Mic2, Phone } from "lucide-react";
 import { Container } from "@/components/container";
+import { ExternalAnchor } from "@/components/external-link";
 import { ResumeTimeline } from "@/components/resume-timeline";
 import { Badge } from "@/components/ui/badge";
-import { absoluteUrl, siteConfig } from "@/config/site";
+import { siteConfig } from "@/config/site";
+import { createPageMetadata } from "@/lib/metadata";
 import { resumeData, type ExperienceId } from "@/lib/resume-data";
 
-export const metadata: Metadata = {
+export const metadata: Metadata = createPageMetadata({
+  path: "/resume",
   title: "Résumé",
   description: "Résumé for Vimal Selvarajan, a UC Riverside computer science student and undergraduate researcher.",
-  alternates: { canonical: absoluteUrl("/resume") },
-};
+});
 
 function ExperienceAnchor({ id }: { id: ExperienceId }) {
   const experience = resumeData.experience.find((entry) => entry.id === id);
@@ -47,12 +49,12 @@ export default function ResumePage() {
               <a href={resumeData.contact.phoneHref} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-primary-foreground/20 px-4 font-semibold hover:bg-primary-foreground/10">
                 <Phone aria-hidden="true" className="size-4" />{resumeData.contact.phone}
               </a>
-              <a href={siteConfig.links.linkedin} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 font-semibold text-primary-foreground/75 hover:text-primary-foreground">
+              <ExternalAnchor href={siteConfig.links.linkedin} className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 font-semibold text-primary-foreground/75 hover:text-primary-foreground">
                 LinkedIn <ArrowUpRight aria-hidden="true" className="size-3.5" />
-              </a>
-              <a href={siteConfig.links.github} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 font-semibold text-primary-foreground/75 hover:text-primary-foreground">
+              </ExternalAnchor>
+              <ExternalAnchor href={siteConfig.links.github} className="inline-flex min-h-11 items-center gap-1 rounded-full px-3 font-semibold text-primary-foreground/75 hover:text-primary-foreground">
                 GitHub <ArrowUpRight aria-hidden="true" className="size-3.5" />
-              </a>
+              </ExternalAnchor>
             </div>
           </div>
 
