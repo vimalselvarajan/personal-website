@@ -3,6 +3,7 @@ import {
   getProjectCardImageSizes,
   getProjectCardImageVariantPath,
   getProjectCardImageVariantWidths,
+  getProjectGalleryImageVariantPath,
   getProjectImageSizes,
   getProjectImageVariantPath,
   getProjectImageVariantWidths,
@@ -24,15 +25,17 @@ describe("project image variants", () => {
   it("derives stable, base-path-independent asset paths", () => {
     expect(getProjectImageVariantPath("12v-to-3v3-buck-converter", 640))
       .toBe("/projects/responsive/12v-to-3v3-buck-converter-640.webp");
+    expect(getProjectGalleryImageVariantPath("hastest-control-suite", 2, 960))
+      .toBe("/projects/responsive/hastest-control-suite-gallery-2-960.webp");
   });
 
   it("keeps card crops in a collision-free responsive asset namespace", () => {
-    expect(getProjectCardImageVariantPath("combat-chess", 384, "avif"))
-      .toBe("/projects/responsive/combat-chess-card-384.avif");
-    expect(getProjectCardImageVariantPath("combat-chess", 384, "webp"))
-      .toBe("/projects/responsive/combat-chess-card-384.webp");
-    expect(getProjectCardImageVariantPath("combat-chess", 384, "webp"))
-      .not.toBe(getProjectImageVariantPath("combat-chess", 384));
+    expect(getProjectCardImageVariantPath("driver-interfaces", 384, "avif"))
+      .toBe("/projects/responsive/driver-interfaces-card-384.avif");
+    expect(getProjectCardImageVariantPath("driver-interfaces", 384, "webp"))
+      .toBe("/projects/responsive/driver-interfaces-card-384.webp");
+    expect(getProjectCardImageVariantPath("driver-interfaces", 384, "webp"))
+      .not.toBe(getProjectImageVariantPath("driver-interfaces", 384));
   });
 
   it("models project-index card widths at each layout breakpoint", () => {
@@ -43,11 +46,11 @@ describe("project image variants", () => {
   });
 
   it("models the current container padding and 42rem height cap in sizes", () => {
-    expect(getProjectImageSizes(1255, 848)).toBe(
-      "(min-width: 1091px) 995px, (min-width: 640px) calc(100vw - 6rem), calc(100vw - 3.5rem)",
+    expect(getProjectImageSizes(1622, 1159)).toBe(
+      "(min-width: 1037px) 941px, (min-width: 640px) calc(100vw - 6rem), (min-width: 480px) calc(100vw - 3.5rem), 12rem",
     );
     expect(getProjectImageSizes(559, 488)).toBe(
-      "(min-width: 655px) 559px, (min-width: 640px) calc(100vw - 6rem), calc(100vw - 3.5rem)",
+      "(min-width: 655px) 559px, (min-width: 640px) calc(100vw - 6rem), (min-width: 480px) calc(100vw - 3.5rem), 12rem",
     );
   });
 
@@ -61,10 +64,18 @@ describe("project image variants", () => {
 
   it("rejects unsafe slugs and invalid candidate widths", () => {
     expect(() => getProjectImageVariantPath("../escape", 640)).toThrow(/lowercase kebab-case/);
+    expect(() => getProjectGalleryImageVariantPath("../escape", 0, 640)).toThrow(/lowercase kebab-case/);
     expect(() => getProjectCardImageVariantPath("../escape", 672, "avif")).toThrow(/lowercase kebab-case/);
     expect(() => getProjectImageVariantPath("project", -1)).toThrow(/positive integer/);
+    expect(() => getProjectGalleryImageVariantPath("project", 0, -1)).toThrow(/positive integer/);
     expect(() => getProjectCardImageVariantPath("project", -1, "webp")).toThrow(/positive integer/);
+    expect(() => getProjectCardImageVariantPath("project", 384, "png" as never)).toThrow(/avif or webp/);
     expect(() => getProjectImageVariantWidths(0)).toThrow(/positive integer/);
     expect(() => getProjectCardImageVariantWidths(0)).toThrow(/positive integer/);
+  });
+
+  it.each([-1, 1.5])("rejects invalid gallery indexes: %s", (index) => {
+    expect(() => getProjectGalleryImageVariantPath("project", index, 640))
+      .toThrow(/non-negative integer/);
   });
 });

@@ -6,6 +6,7 @@ export type ProjectCardImageFormat = "avif" | "webp";
 const projectImageMaximumCssHeight = 42 * 16;
 const projectImageMaximumContainerWidth = 1184;
 const projectImageTabletBreakpoint = 640;
+const projectImagePhoneBreakpoint = 480;
 const projectImageMobileChrome = 56;
 const projectImageDesktopChrome = 96;
 
@@ -47,6 +48,16 @@ export function getProjectImageVariantPath(slug: string, width: number) {
   return `/projects/responsive/${slug}-${width}.webp` as const;
 }
 
+export function getProjectGalleryImageVariantPath(slug: string, index: number, width: number) {
+  if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) {
+    throw new Error(`Project image slug must be lowercase kebab-case; received "${slug}"`);
+  }
+  if (!Number.isInteger(index) || index < 0) {
+    throw new Error(`Project gallery image index must be a non-negative integer; received ${index}`);
+  }
+  assertPositiveInteger(width, "Project image variant width");
+  return `/projects/responsive/${slug}-gallery-${index}-${width}.webp` as const;
+}
 export function getProjectCardImageVariantPath(
   slug: string,
   width: number,
@@ -86,6 +97,7 @@ export function getProjectImageSizes(sourceWidth: number, sourceHeight: number) 
   return [
     `(min-width: ${fixedWidthBreakpoint}px) ${maximumRenderedWidth}px`,
     `(min-width: ${projectImageTabletBreakpoint}px) calc(100vw - ${projectImageDesktopChrome / 16}rem)`,
-    `calc(100vw - ${projectImageMobileChrome / 16}rem)`,
+    `(min-width: ${projectImagePhoneBreakpoint}px) calc(100vw - ${projectImageMobileChrome / 16}rem)`,
+    "12rem",
   ].join(", ");
 }

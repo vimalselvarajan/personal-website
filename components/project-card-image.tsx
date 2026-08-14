@@ -12,15 +12,15 @@ import type { ProjectCardImageFormat } from "@/lib/project-image-variants";
 type ProjectCardImageProps = {
   project: ProjectFrontmatter;
   preload?: boolean;
+  sizes?: string;
 };
 
-export function ProjectCardImage({ project, preload = false }: ProjectCardImageProps) {
+export function ProjectCardImage({ project, preload = false, sizes = getProjectCardImageSizes() }: ProjectCardImageProps) {
   const cardImage = project.cardImage ?? {
     src: project.image,
     width: project.imageWidth,
     height: project.imageHeight,
   };
-  const sizes = getProjectCardImageSizes();
   const widths = getProjectCardImageVariantWidths(cardImage.width);
   const buildSrcSet = (format: ProjectCardImageFormat) => widths
     .map((width) => (

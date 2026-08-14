@@ -68,11 +68,9 @@ describe("content repository", () => {
       contentRoot: path.join(process.cwd(), "content"),
       publicRoot: path.join(process.cwd(), "public"),
     });
-    expect(repository.list("projects")).toHaveLength(5);
+    expect(repository.list("projects")).toHaveLength(4);
     expect(repository.list("research")).toHaveLength(3);
-    expect(repository.get("projects", "combat-chess")?.frontmatter.summary).toBe(
-      "Built a C++ terminal-based chess variant with combat move choices, a CMake build, GoogleTest coverage, and Valgrind/Gcov/Lcov quality tooling.",
-    );
+    expect(repository.get("projects", "combat-chess")).toBeNull();
   });
 
   it("does not construct filesystem paths from unknown route input", () => {

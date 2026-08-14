@@ -24,7 +24,7 @@ export function ThemeToggle() {
   return (
     <Button
       type="button"
-      variant="ghost"
+      variant="glass"
       size="icon"
       aria-label={label}
       title={label}

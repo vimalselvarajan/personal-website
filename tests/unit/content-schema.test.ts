@@ -19,11 +19,19 @@ describe("content schemas", () => {
     expect(projectFrontmatterSchema.parse(validProject)).toEqual(validProject);
   });
 
+  it("accepts an optional primary image caption", () => {
+    const imageCaption = "Project overview";
+
+    expect(projectFrontmatterSchema.parse({ ...validProject, imageCaption }))
+      .toEqual({ ...validProject, imageCaption });
+  });
+
   it.each([
     ["non-kebab slug", { slug: "Not Valid" }],
     ["empty stack item", { stack: ["TypeScript", " "] }],
     ["non-GitHub URL", { github: "https://example.com/project" }],
     ["non-positive dimensions", { imageWidth: 0 }],
+    ["empty primary image caption", { imageCaption: " " }],
     ["unknown field", { unexpected: true }],
   ])("rejects %s", (_label, override) => {
     expect(projectFrontmatterSchema.safeParse({ ...validProject, ...override }).success).toBe(false);

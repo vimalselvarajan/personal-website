@@ -11,6 +11,7 @@ import {
   getProjectCardImageVariantPath,
   getProjectCardImageVariantWidths,
   getProjectImageVariantPath,
+  getProjectGalleryImageVariantPath,
   getProjectImageVariantWidths,
 } from "../lib/project-image-variants.ts";
 
@@ -31,7 +32,7 @@ function formatBytes(bytes) {
   return `${(bytes / 1024).toFixed(1)} KiB`;
 }
 
-async function loadImageDescriptor(project, kind, asset) {
+async function loadImageDescriptor(project, kind, asset, galleryIndex) {
   const sourcePath = path.join(publicDirectory, asset.src.slice(1));
   const metadata = await sharp(sourcePath).metadata();
 
@@ -51,6 +52,7 @@ async function loadImageDescriptor(project, kind, asset) {
       ? getProjectCardImageVariantWidths(asset.width)
       : getProjectImageVariantWidths(asset.width),
     formats: kind === "card" ? cardFormats : ["webp"],
+    galleryIndex,
     project,
   };
 }
@@ -71,11 +73,13 @@ async function loadProjects() {
     };
     const cardAsset = project.cardImage ?? detailAsset;
 
+    const gallery = project.gallery ?? [];
     return {
       project,
       images: await Promise.all([
         loadImageDescriptor(project, "detail", detailAsset),
         loadImageDescriptor(project, "card", cardAsset),
+        ...gallery.map((asset, index) => loadImageDescriptor(project, "gallery", asset, index)),
       ]),
     };
   }));
@@ -96,7 +100,9 @@ function maximumBytesFor(image, width, format) {
 function outputPathFor(image, width, format) {
   const assetPath = image.kind === "card"
     ? getProjectCardImageVariantPath(image.project.slug, width, format)
-    : getProjectImageVariantPath(image.project.slug, width);
+    : image.kind === "gallery"
+      ? getProjectGalleryImageVariantPath(image.project.slug, image.galleryIndex, width)
+      : getProjectImageVariantPath(image.project.slug, width);
   return path.join(publicDirectory, assetPath.slice(1));
 }
 
@@ -148,6 +154,21 @@ async function generateAssets(projects) {
               .resize({ width, withoutEnlargement: true })
               .webp({ quality: 95, effort: 6, smartSubsample: false })
               .toBuffer();
+          }
+          if (image.kind === "card" && format === "avif" && buffer.byteLength > maximumBytesFor(image, width, format)) {
+            for (const quality of [55, 50, 45, 40]) {
+              buffer = await sharp(image.sourcePath)
+                .resize({ width, withoutEnlargement: true })
+                .avif({
+                  quality,
+                  effort: 9,
+                  chromaSubsampling: "4:2:0",
+                  bitdepth: 8,
+                  tune: "ssim",
+                })
+                .toBuffer();
+              if (buffer.byteLength <= maximumBytesFor(image, width, format)) break;
+            }
           }
           if (image.kind === "card" && format === "webp" && buffer.byteLength > maximumCardBytes) {
             buffer = await sharp(image.sourcePath)

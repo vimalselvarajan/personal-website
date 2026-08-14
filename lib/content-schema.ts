@@ -13,6 +13,10 @@ const projectImageAsset = z.object({
   height: positiveInteger,
 }).strict();
 
+const projectGalleryImage = projectImageAsset.extend({
+  alt: nonEmptyString,
+  caption: nonEmptyString,
+}).strict();
 const commonFrontmatterSchema = z.object({
   title: nonEmptyString,
   slug,
@@ -25,9 +29,11 @@ export const projectFrontmatterSchema = commonFrontmatterSchema.extend({
   github: githubUrl,
   image: projectImage,
   imageAlt: nonEmptyString,
+  imageCaption: nonEmptyString.optional(),
   imageWidth: positiveInteger,
   imageHeight: positiveInteger,
   cardImage: projectImageAsset.optional(),
+  gallery: z.array(projectGalleryImage).min(1).optional(),
 }).strict();
 
 export const researchFrontmatterSchema = commonFrontmatterSchema.extend({

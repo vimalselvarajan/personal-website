@@ -1,3 +1,5 @@
+import { Container } from "@/components/container";
+
 type PageIntroProps = {
   eyebrow: string;
   title: string;
@@ -6,13 +8,13 @@ type PageIntroProps = {
 
 export function PageIntro({ eyebrow, title, description }: PageIntroProps) {
   return (
-    <section aria-labelledby="page-title" className="border-b border-border bg-surface">
-      <Container className="py-16 sm:py-24">
+    <section aria-labelledby="page-title" className="archive-intro">
+      <Container className="archive-intro-inner">
+        <div className="archive-intro-index" aria-hidden="true"><span /> <span /> <span /></div>
         <p className="eyebrow">{eyebrow}</p>
-        <h1 id="page-title" className="mt-5 max-w-5xl text-balance text-5xl font-semibold tracking-[-0.06em] sm:text-7xl">{title}</h1>
-        <p className="mt-7 max-w-3xl text-pretty text-lg leading-8 text-muted-foreground sm:text-xl">{description}</p>
+        <h1 id="page-title" className="archive-title">{title}</h1>
+        <p className="archive-intro-copy">{description}</p>
       </Container>
     </section>
   );
 }
-import { Container } from "@/components/container";

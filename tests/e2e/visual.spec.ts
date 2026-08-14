@@ -2,6 +2,8 @@ import { expect, test } from "@playwright/test";
 
 for (const [name, route] of [
   ["home", "./"],
+  ["projects", "./projects/"],
+  ["research", "./research/"],
   ["project-detail", "./projects/12v-to-3v3-buck-converter/"],
   ["resume", "./resume/"],
 ] as const) {

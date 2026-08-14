@@ -3,7 +3,7 @@ import { portfolioUrl } from "../../config/site";
 import { readImageDimensions } from "../../lib/image-dimensions";
 import { getSitemapPaths } from "./support";
 
-const profileWidths = [384, 640, 768, 1024] as const;
+const profileWidths = [384, 640, 768, 1024, 1280] as const;
 const profileFormats = [
   { extension: "avif", contentType: "image/avif" },
   { extension: "webp", contentType: "image/webp" },
@@ -144,7 +144,7 @@ test("metadata, public assets, and external link safety are correct", async ({ p
     .toEqual({ width: 1200, height: 630 });
   expect((await request.get("./opengraph-image")).status()).toBe(404);
 
-  for (const asset of ["./robots.txt", "./sitemap.xml", "./icon.svg", "./projects/power_supply.png"]) {
+  for (const asset of ["./robots.txt", "./sitemap.xml", "./icon.svg", "./projects/12v-to-3v3-buck-converter.png"]) {
     expect((await request.get(asset)).status(), asset).toBe(200);
   }
 });
@@ -159,8 +159,8 @@ test("homepage portrait uses responsive modern sources and an LCP preload", asyn
   await expect(image).toHaveAttribute("loading", "eager");
   await expect(image).toHaveAttribute("fetchpriority", "high");
   await expect(image).toHaveAttribute("decoding", "async");
-  await expect(image).toHaveAttribute("width", "1024");
-  await expect(image).toHaveAttribute("height", "768");
+  await expect(image).toHaveAttribute("width", "1280");
+  await expect(image).toHaveAttribute("height", "960");
 
   for (const format of profileFormats) {
     const locator = format.extension === "jpg"
@@ -191,73 +191,87 @@ test("homepage portrait uses responsive modern sources and an LCP preload", asyn
 });
 
 test("unknown paths use the portfolio 404", async ({ page }) => {
-  const response = await page.goto("./not-a-real-route/");
-  expect(response?.status()).toBe(404);
-  await expect(page.getByRole("heading", { name: /This path does not lead/ })).toBeVisible();
-});
-
-test("the first project image is preloaded while remaining images are lazy and container-capped", async ({ page }) => {
-  await page.goto("./projects/");
-  const images = page.locator('section[aria-label="Project index"] article img');
-  const firstImage = images.first();
-  await expect(firstImage).toBeVisible();
-  expect(await firstImage.getAttribute("loading")).toBe("eager");
-  expect(await firstImage.getAttribute("fetchpriority")).toBe("high");
-  expect(await firstImage.getAttribute("decoding")).toBe("sync");
-  const firstSlug = await firstImage.getAttribute("data-project-card-image");
-  expect(firstSlug).toBeTruthy();
-  const matchingPreload = page.locator(
-    `head link[rel="preload"][as="image"][type="image/avif"][imagesrcset*="${firstSlug}-card-"]`,
-  );
-  await expect(matchingPreload).toHaveCount(1);
-  await expect(matchingPreload).toHaveAttribute("fetchpriority", "high");
-  expect(await images.nth(1).getAttribute("loading")).toBe("lazy");
-  expect(await images.nth(1).getAttribute("fetchpriority")).toBe("auto");
-  expect(await images.nth(1).getAttribute("decoding")).toBe("async");
-  expect(await firstImage.evaluate((element) => element.getBoundingClientRect().width)).toBeLessThanOrEqual(608);
-  expect(await firstImage.getAttribute("src")).toMatch(/^\/Personal-Website\/projects\//);
-  for (let index = 0; index < await images.count(); index += 1) {
-    await images.nth(index).scrollIntoViewIfNeeded();
-    await expect.poll(() => images.nth(index).evaluate((element) => {
-      const image = element as HTMLImageElement;
-      return image.complete && image.naturalWidth > 0;
-    })).toBe(true);
+  for (const path of ["./not-a-real-route/", "./projects/combat-chess/"]) {
+    const response = await page.goto(path);
+    expect(response?.status(), path).toBe(404);
+    await expect(page.getByRole("heading", { name: /This path does not lead/ })).toBeVisible();
   }
 });
 
-test("all sitemap routes reflow without page-level overflow at 320px", async ({ page, request }, testInfo) => {
-  test.skip(testInfo.project.name !== "chromium-desktop", "One engine covers the narrow reflow audit");
+test("Projects preloads the Hastest carousel while project cards remain lazy", async ({ page }) => {
+  await page.goto("./projects/");
+
+  const hastest = page.locator('section[aria-label="Project index"] article[data-scene="hastest-control-suite"]');
+  const carouselImage = hastest.locator(".project-carousel-slide img");
+  await expect(carouselImage).toBeVisible();
+  await expect(carouselImage).toHaveAttribute("loading", "eager");
+  await expect(carouselImage).toHaveAttribute("fetchpriority", "high");
+  await expect(carouselImage).toHaveAttribute("decoding", "async");
+
+  const hastestPreload = page.locator(
+    'head link[rel="preload"][as="image"][type="image/avif"][imagesrcset*="hastest-control-suite-card-384.avif"]',
+  );
+  await expect(hastestPreload).toHaveCount(1);
+  await expect(hastestPreload).toHaveAttribute("fetchpriority", "high");
+
+  const cardImages = page.locator('section[aria-label="Project index"] img[data-project-card-image]');
+  await expect(cardImages).toHaveCount(3);
+  await expect(page.locator(
+    'head link[rel="preload"][as="image"][imagesrcset*="12v-to-3v3-buck-converter-card-"]',
+  )).toHaveCount(0);
+
+  for (let index = 0; index < await cardImages.count(); index += 1) {
+    const image = cardImages.nth(index);
+    await expect(image).toHaveAttribute("loading", "lazy");
+    await expect(image).toHaveAttribute("fetchpriority", "auto");
+    await expect(image).toHaveAttribute("decoding", "async");
+    await image.scrollIntoViewIfNeeded();
+    await expect.poll(() => image.evaluate((element) => {
+      const cardImage = element as HTMLImageElement;
+      return cardImage.complete && cardImage.naturalWidth > 0;
+    })).toBe(true);
+  }
+
+  const buckImage = cardImages.first();
+  expect(await buckImage.evaluate((element) => element.getBoundingClientRect().width)).toBeLessThanOrEqual(608);
+  expect(await buckImage.getAttribute("src")).toMatch(/^\/Personal-Website\/projects\//);
+});
+
+test("all sitemap routes reflow with enlarged text at 320px", async ({ page, request }, testInfo) => {
+  test.skip(testInfo.project.name !== "chromium-desktop", "One engine covers the narrow enlarged-text audit");
   test.setTimeout(120_000);
   await page.setViewportSize({ width: 320, height: 720 });
 
   for (const path of await getSitemapPaths(request)) {
     const response = await page.goto(path, { waitUntil: "domcontentloaded" });
     expect(response?.status(), path).toBe(200);
-    await expectNoHorizontalOverflow(page, `${path} at 320px`);
+    await page.locator("html").evaluate((element) => {
+      element.style.fontSize = "200%";
+    });
+    await expectNoHorizontalOverflow(page, `${path} at 320px with 200% text`);
   }
 });
 
-test("the mobile navigation remains viewport-capped in landscape", async ({ page }, testInfo) => {
+test("the mobile dock remains viewport-contained in landscape", async ({ page }, testInfo) => {
   test.skip(testInfo.project.name !== "chromium-desktop", "One engine covers the landscape geometry audit");
   await page.setViewportSize({ width: 667, height: 320 });
   await page.goto("./");
-  await page.getByRole("button", { name: "Open navigation menu" }).click();
 
-  const navigation = page.locator("#mobile-navigation");
+  const navigation = page.getByRole("navigation", { name: "Mobile primary" });
   await expect(navigation).toBeVisible();
   const box = await navigation.boundingBox();
   expect(box).not.toBeNull();
   if (!box) throw new Error("Mobile navigation has no layout box.");
+  expect(box.x).toBeGreaterThanOrEqual(0);
+  expect(box.x + box.width).toBeLessThanOrEqual(668);
+  expect(box.y).toBeGreaterThanOrEqual(0);
   expect(box.y + box.height).toBeLessThanOrEqual(321);
 
   const metrics = await navigation.evaluate((element) => ({
-    clientHeight: element.clientHeight,
-    scrollHeight: element.scrollHeight,
-    overflowY: getComputedStyle(element).overflowY,
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
   }));
-  expect(metrics.clientHeight).toBeLessThanOrEqual(256);
-  expect(metrics.scrollHeight).toBeGreaterThanOrEqual(metrics.clientHeight);
-  expect(metrics.overflowY).toBe("auto");
+  expect(metrics.scrollWidth).toBeLessThanOrEqual(metrics.clientWidth);
   await expectNoHorizontalOverflow(page, "landscape navigation overflow");
 });
 
@@ -298,4 +312,33 @@ test("résumé content is readable without client JavaScript", async ({ browser,
   await expect(page.locator("[data-experience-id]")).toHaveCount(4);
   await expect(page.getByRole("heading", { name: "Hastest Solutions, Inc." })).toBeVisible();
   await context.close();
+});
+test("project archive titles remain visible and desktop scenes stay aligned", async ({ page }, testInfo) => {
+  await page.goto("./projects/", { waitUntil: "networkidle" });
+
+  const featuredTitles = page.locator('section[aria-label="Project index"] .atlas-scene-title');
+  const compactEntries = page.locator('section[aria-label="Project index"] .project-compact-entry');
+  await expect(featuredTitles).toHaveCount(2);
+  await expect(featuredTitles).toHaveText([
+    "Hastest DAC, DAQ, and Power Supply Control Suite",
+    "+12V to +3V3 Buck Converter",
+  ]);
+  await expect(compactEntries).toHaveCount(2);
+  await expect(compactEntries.getByRole("heading")).toHaveText([
+    "Driver Interfaces",
+    "Mini Genome Assembler",
+  ]);
+  const titleMetrics = await featuredTitles.evaluateAll((elements) => elements.map((element) => ({
+    clientWidth: element.clientWidth,
+    scrollWidth: element.scrollWidth,
+  })));
+  for (const { clientWidth, scrollWidth } of titleMetrics) {
+    expect(scrollWidth).toBeLessThanOrEqual(clientWidth + 1);
+  }
+
+  if (testInfo.project.name !== "chromium-desktop") return;
+
+  const sceneHeights = await page.locator('section[aria-label="Project index"] .atlas-scene')
+    .evaluateAll((elements) => elements.map((element) => element.getBoundingClientRect().height));
+  expect(Math.max(...sceneHeights) - Math.min(...sceneHeights)).toBeLessThanOrEqual(24);
 });

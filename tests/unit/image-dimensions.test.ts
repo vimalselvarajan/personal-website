@@ -14,8 +14,8 @@ function createWebPHeader(format: "VP8X" | "VP8L") {
 
 describe("image dimensions", () => {
   it("reads PNG dimensions", () => {
-    const buffer = fs.readFileSync(path.join(process.cwd(), "public/projects/power_supply.png"));
-    expect(readImageDimensions(buffer, "power_supply.png")).toEqual({ width: 1255, height: 848 });
+    const buffer = fs.readFileSync(path.join(process.cwd(), "public/projects/12v-to-3v3-buck-converter.png"));
+    expect(readImageDimensions(buffer, "12v-to-3v3-buck-converter.png")).toEqual({ width: 1622, height: 1159 });
   });
 
   it("reads the committed social preview dimensions", () => {
@@ -54,11 +54,6 @@ describe("image dimensions", () => {
       0x00,
     ]);
     expect(readImageDimensions(buffer, "markers.jpg")).toEqual({ width: 45, height: 23 });
-  });
-
-  it("reads WebP dimensions", () => {
-    const buffer = fs.readFileSync(path.join(process.cwd(), "public/projects/combat_chess_card.webp"));
-    expect(readImageDimensions(buffer, "combat_chess_card.webp")).toEqual({ width: 608, height: 456 });
   });
 
   it("reads extended VP8X WebP dimensions", () => {

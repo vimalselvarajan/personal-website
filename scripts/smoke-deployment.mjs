@@ -43,8 +43,8 @@ console.log(`PASS ${baseUrl} HSTS`);
 const sitemap = await (await fetchWithRetry("sitemap.xml")).text();
 const sitemapMatches = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)];
 if (sitemapMatches.length === 0) throw new Error("Sitemap does not contain any routes");
-if (publicRoutes.length !== 13) {
-  throw new Error(`Public route manifest must contain 13 routes; received ${publicRoutes.length}`);
+if (publicRoutes.length !== 12) {
+  throw new Error(`Public route manifest must contain 12 routes; received ${publicRoutes.length}`);
 }
 
 const basePath = baseUrl.pathname.replace(/\/+$/, "");
@@ -108,11 +108,11 @@ if (socialDimensions.width !== 1200 || socialDimensions.height !== 630) {
 }
 console.log(`PASS ${new URL(socialPreviewPath, baseUrl)} image/png 1200x630`);
 
-const profileAssets = [384, 640, 768, 1024].flatMap((width) =>
+const profileAssets = [384, 640, 768, 1024, 1280].flatMap((width) =>
   ["avif", "webp", "jpg"].map((format) => `profile/profile-${width}.${format}`),
 );
 for (const asset of [
-  "robots.txt", "sitemap.xml", "icon.svg", "projects/power_supply.png",
+  "robots.txt", "sitemap.xml", "icon.svg", "projects/12v-to-3v3-buck-converter.png",
   "projects/responsive/12v-to-3v3-buck-converter-640.webp",
   ...profileAssets,
 ]) {

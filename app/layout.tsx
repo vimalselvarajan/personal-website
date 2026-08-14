@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import "@/app/globals.css";
 import { absoluteUrl, siteConfig } from "@/config/site";
+import { PageTransition } from "@/components/page-transition";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
 import { ThemeProvider } from "@/components/theme-provider";
@@ -20,7 +21,14 @@ export const metadata: Metadata = {
   icons: { icon: absoluteUrl("/icon.svg") },
 };
 
-export const viewport: Viewport = { colorScheme: "light dark", themeColor: [{ media: "(prefers-color-scheme: light)", color: "#f7f8fa" }, { media: "(prefers-color-scheme: dark)", color: "#17191d" }] };
+export const viewport: Viewport = {
+  colorScheme: "light dark",
+  viewportFit: "cover",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f4f6f8" },
+    { media: "(prefers-color-scheme: dark)", color: "#14161a" },
+  ],
+};
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
@@ -29,7 +37,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <a href="#main-content" className="skip-link">Skip to content</a>
           <SiteHeader />
-          <main id="main-content" tabIndex={-1}>{children}</main>
+          <main id="main-content" tabIndex={-1}>
+            <PageTransition>{children}</PageTransition>
+          </main>
           <SiteFooter />
         </ThemeProvider>
       </body>
