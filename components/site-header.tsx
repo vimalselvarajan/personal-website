@@ -39,7 +39,7 @@ export function SiteHeader() {
 
   return (
     <header
-      className="site-header sticky top-0 z-50 print:hidden"
+      className="site-header pointer-events-none fixed inset-x-0 top-0 z-50 print:hidden"
       style={{ viewTransitionName: "site-header" }}
     >
       <Container className="pointer-events-none flex min-h-20 items-center py-3">

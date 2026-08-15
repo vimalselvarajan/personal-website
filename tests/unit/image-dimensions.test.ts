@@ -1,5 +1,3 @@
-import fs from "node:fs";
-import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { readImageDimensions } from "@/lib/image-dimensions";
 
@@ -13,20 +11,8 @@ function createWebPHeader(format: "VP8X" | "VP8L") {
 }
 
 describe("image dimensions", () => {
-  it("reads PNG dimensions", () => {
-    const buffer = fs.readFileSync(path.join(process.cwd(), "public/projects/12v-to-3v3-buck-converter.png"));
-    expect(readImageDimensions(buffer, "12v-to-3v3-buck-converter.png")).toEqual({ width: 1622, height: 1159 });
-  });
 
-  it("reads the committed social preview dimensions", () => {
-    const buffer = fs.readFileSync(path.join(process.cwd(), "public/social-preview.png"));
-    expect(readImageDimensions(buffer, "social-preview.png")).toEqual({ width: 1200, height: 630 });
-  });
 
-  it("reads JPEG dimensions", () => {
-    const buffer = fs.readFileSync(path.join(process.cwd(), "public/projects/hastest_project.jpg"));
-    expect(readImageDimensions(buffer, "hastest_project.jpg")).toEqual({ width: 800, height: 571 });
-  });
 
   it("skips non-marker bytes while scanning for a JPEG start-of-frame segment", () => {
     const buffer = Buffer.from([

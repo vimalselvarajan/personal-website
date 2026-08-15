@@ -21,12 +21,16 @@ function requireProject(slug: string) {
   return project;
 }
 
+const featuredProjectSlots = [
+  "mtp-lite",
+  "hastest-control-suite",
+  null,
+] as const;
+
 export default function ProjectsPage() {
-  const featuredProjects = [
-    requireProject("hastest-control-suite"),
-    requireProject("12v-to-3v3-buck-converter"),
-  ];
+  const featuredProjects = featuredProjectSlots.map((slug) => slug ? requireProject(slug) : null);
   const additionalProjects = [
+    requireProject("12v-to-3v3-buck-converter"),
     requireProject("driver-interfaces"),
     requireProject("mini-genome-assembler"),
   ];
@@ -34,10 +38,10 @@ export default function ProjectsPage() {
   return (
       <section className="atlas-page" aria-labelledby="projects-page-heading">
       <Container>
-        <header className="atlas-heading">
+        <header className="atlas-heading projects-heading">
           <p className="eyebrow">Selected engineering work</p>
           <h1 id="projects-page-heading">Systems built across hardware and software.</h1>
-          <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-muted-foreground">
+          <p className="projects-heading-copy text-pretty text-muted-foreground">
             A focused collection spanning long-running validation, power electronics, embedded interfaces, and bioinformatics algorithms.
           </p>
           <div className="atlas-register">Project collection</div>
@@ -46,6 +50,7 @@ export default function ProjectsPage() {
         <section aria-label="Project index">
           <div className="project-atlas project-featured-grid">
             {featuredProjects.map((project, index) => (
+              project ? (
               <article
                 key={project.frontmatter.slug}
                 data-scene={project.frontmatter.slug}
@@ -82,6 +87,26 @@ export default function ProjectsPage() {
                   </div>
                 </div>
               </article>
+              ) : (
+                <article
+                  key="reserved-project-slot"
+                  data-scene="reserved-project-slot"
+                  data-layout={index % 2 === 0 ? "forward" : "reverse"}
+                  className="atlas-scene atlas-scene-placeholder"
+                  aria-labelledby="reserved-project-heading"
+                >
+                  <div className="atlas-scene-visual">
+                    <div className="atlas-placeholder-media" aria-hidden="true">
+                      <span className="atlas-placeholder-mark">03</span>
+                    </div>
+                  </div>
+                  <div className="atlas-scene-copy">
+                    <p className="atlas-scene-index">{String(index + 1).padStart(2, "0")}</p>
+                    <h2 id="reserved-project-heading" className="atlas-scene-title">Project in progress</h2>
+                    <p className="atlas-scene-summary">Reserved for the next featured build.</p>
+                  </div>
+                </article>
+              )
             ))}
           </div>
 
@@ -104,7 +129,7 @@ export default function ProjectsPage() {
                   </div>
                   <div className="min-w-0">
                     <p className="font-mono text-xs font-semibold tracking-[0.1em] text-link">
-                      {String(index + featuredProjects.length + 1).padStart(2, "0")}
+                      {String(index + featuredProjectSlots.length + 1).padStart(2, "0")}
                     </p>
                     <h3 className="mt-2 text-balance text-xl font-semibold leading-tight tracking-[-0.035em] sm:text-2xl">
                       {project.frontmatter.title}

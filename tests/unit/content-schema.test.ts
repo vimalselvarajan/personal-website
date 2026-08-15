@@ -1,52 +1,32 @@
 import { describe, expect, it } from "vitest";
-import { projectFrontmatterSchema, researchFrontmatterSchema } from "@/lib/content-schema";
+import { researchFrontmatterSchema } from "@/lib/content-schema";
 
-const validProject = {
-  title: "Project",
-  slug: "project",
+const validResearch = {
+  title: "Research",
+  slug: "research",
   summary: "Summary",
   order: 1,
-  stack: ["TypeScript"],
-  github: "https://github.com/example/project",
-  image: "/projects/project.png",
-  imageAlt: "Project screenshot",
-  imageWidth: 800,
-  imageHeight: 600,
+  status: "Ongoing",
+  researchArea: "Systems",
+  tools: ["TypeScript"],
+  affiliation: "Lab",
 };
 
 describe("content schemas", () => {
-  it("accepts valid project frontmatter", () => {
-    expect(projectFrontmatterSchema.parse(validProject)).toEqual(validProject);
+  it("requires a nonempty research tool list", () => {
+    expect(researchFrontmatterSchema.safeParse({ ...validResearch, tools: [] }).success).toBe(false);
   });
 
-  it("accepts an optional primary image caption", () => {
-    const imageCaption = "Project overview";
-
-    expect(projectFrontmatterSchema.parse({ ...validProject, imageCaption }))
-      .toEqual({ ...validProject, imageCaption });
+  it("accepts complete optional research image metadata", () => {
+    const image = { image: "/research/poster.jpg", imageAlt: "Research poster", imageWidth: 2500, imageHeight: 1875 };
+    expect(researchFrontmatterSchema.parse({ ...validResearch, ...image })).toEqual({ ...validResearch, ...image });
   });
 
   it.each([
-    ["non-kebab slug", { slug: "Not Valid" }],
-    ["empty stack item", { stack: ["TypeScript", " "] }],
-    ["non-GitHub URL", { github: "https://example.com/project" }],
-    ["non-positive dimensions", { imageWidth: 0 }],
-    ["empty primary image caption", { imageCaption: " " }],
+    ["partial image metadata", { image: "/research/poster.jpg", imageAlt: "Research poster", imageWidth: 2500 }],
+    ["an image outside the research directory", { image: "/other/poster.jpg", imageAlt: "Research poster", imageWidth: 2500, imageHeight: 1875 }],
     ["unknown field", { unexpected: true }],
-  ])("rejects %s", (_label, override) => {
-    expect(projectFrontmatterSchema.safeParse({ ...validProject, ...override }).success).toBe(false);
-  });
-
-  it("requires a nonempty research tool list", () => {
-    expect(researchFrontmatterSchema.safeParse({
-      title: "Research",
-      slug: "research",
-      summary: "Summary",
-      order: 1,
-      status: "Ongoing",
-      researchArea: "Systems",
-      tools: [],
-      affiliation: "Lab",
-    }).success).toBe(false);
+  ])("rejects %s", (_label, image) => {
+    expect(researchFrontmatterSchema.safeParse({ ...validResearch, ...image }).success).toBe(false);
   });
 });

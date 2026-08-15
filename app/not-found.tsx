@@ -15,7 +15,7 @@ export default function NotFound() {
           This path does not lead to a portfolio entry.
         </h1>
         <p className="mx-auto mt-5 max-w-xl text-lg leading-8 text-muted-foreground">
-          The link may be outdated. Return to the overview or continue through the project archive.
+          The link may be outdated. Return to the overview or browse current research.
         </p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
           <Button asChild>
@@ -25,7 +25,7 @@ export default function NotFound() {
             </Link>
           </Button>
           <Button asChild variant="secondary">
-            <Link href="/projects" transitionTypes={["nav-root"]}>Browse projects</Link>
+            <Link href="/research" transitionTypes={["nav-root"]}>Browse research</Link>
           </Button>
         </div>
       </div>

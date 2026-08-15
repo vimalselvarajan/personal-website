@@ -10,7 +10,7 @@ A statically exported Next.js portfolio for Vimal Selvarajan, a UC Riverside com
 - ESLint 10, Vitest with V8 coverage, Playwright, axe, and three-run Lighthouse budgets
 - Repository-authored Markdown rendered without raw HTML or JSX execution
 - Static export for the `/Personal-Website` GitHub Pages base path
-- Responsive profile and project assets with committed format, dimension, and size budgets
+- Responsive profile assets with committed format, dimension, and size budgets
 
 ## Local development
 
@@ -35,34 +35,22 @@ npm run test:lighthouse
 
 `npm run validate` checks the toolchain, ESLint, TypeScript, coverage, responsive assets, the production export, and bundle/image budgets. `npm run test:e2e` builds once and tests that export across Chromium desktop/mobile, Firefox, and WebKit. `npm run test:e2e:export` reuses an existing `out/` directory. Lighthouse also reuses `out/` and serves it on an isolated ephemeral port.
 
-Use `npm run assets:generate` only when the source portrait or project artwork intentionally changes; `npm run assets:check` verifies all 12 profile outputs and 47 project outputs (17 detail WebP, 15 listing-card AVIF, and 15 listing-card WebP files).
+Use `npm run assets:generate` only when the source portrait intentionally changes; `npm run assets:check` verifies all 12 profile outputs.
 
 ## Content map
 
 | Content | Location |
 | --- | --- |
 | Identity, links, navigation, production URL, and base path | `config/site.ts` |
-| Project entries | `content/projects/*.md` |
 | Research entries | `content/research/*.md` |
 | Résumé data | `lib/resume-data.ts` |
-| Project source images | `public/projects/` |
-| Responsive profile and project images | `public/profile/`, `public/projects/responsive/` |
+| Responsive profile images | `public/profile/` |
 | Content schemas and repository | `lib/content-schema.ts`, `lib/content.ts` |
 | Route and link validation | `lib/routes.ts`, `lib/site-routes.ts`, `lib/links.ts` |
 | Shared route metadata | `lib/metadata.ts` |
 | Social preview | `public/social-preview.png` |
 
 Content is trusted and repository-authored, but it is still rendered as Markdown only: raw HTML and JSX are not executed. Internal content links must resolve to generated routes. External links must be valid HTTPS URLs; protocol-relative, HTTP, executable, credential-bearing, malformed, encoded-control, and control-character URLs are rejected.
-
-### Project front matter
-
-Each project filename must match its `slug`. Required fields are:
-
-- `title`, `slug`, `summary`, and numeric `order`
-- `stack` and an HTTPS `github` URL
-- `image`, `imageAlt`, `imageWidth`, and `imageHeight`
-
-An optional `cardImage` object (`src`, `width`, and `height`) can provide a smaller listing image. Project summaries must be unique. Projects are displayed by `order`, not filename.
 
 ### Research front matter
 

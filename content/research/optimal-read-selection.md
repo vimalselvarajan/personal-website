@@ -16,6 +16,10 @@ tools:
   - "Hifiasm"
   - "Seqkit"
 affiliation: "Lonardi Lab · Dr. Stefano Lonardi"
+image: "/research/mtp-lite-genome-assembly-poster.jpg"
+imageAlt: "Poster summarizing MTP Lite long-read genome assembly optimization methods and results"
+imageWidth: 2500
+imageHeight: 1875
 ---
 
 ## Research focus

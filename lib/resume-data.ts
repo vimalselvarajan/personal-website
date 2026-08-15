@@ -17,7 +17,7 @@ export type ResumeDomain =
 
 export type RelatedWorkLink = {
   label: string;
-  href: Route<`/projects/${string}` | `/research/${string}`>;
+  href: Route<`/research/${string}`>;
 };
 
 export type ExperienceEntry = {
@@ -30,20 +30,7 @@ export type ExperienceEntry = {
   kind: "research" | "industry";
   domains: readonly ResumeDomain[];
   technologies: readonly string[];
-  relatedWork: RelatedWorkLink;
-  highlights: readonly string[];
-};
-
-export type ResumeProject = {
-  id: "mtp-lite" | "hastest-control-suite";
-  title: string;
-  organization: string;
-  role: string;
-  location: string;
-  dates: string;
-  experienceId: ExperienceId;
-  technologies: readonly string[];
-  relatedWork: RelatedWorkLink;
+  relatedWork?: RelatedWorkLink;
   highlights: readonly string[];
 };
 
@@ -144,10 +131,6 @@ export const resumeData = {
       kind: "industry",
       domains: ["Hardware automation"],
       technologies: ["Python", "FTDI", "SPI", "Keysight DAQ970A", "PyVISA"],
-      relatedWork: {
-        label: "Explore the control suite",
-        href: "/projects/hastest-control-suite",
-      },
       highlights: [
         "Developed an automated 1,000-hour HTOL validation platform for RF amplifier modules, collecting performance and reliability data across 48 units.",
         "Built Python hardware-control software integrating FTDI/SPI DACs, Keysight DAQ970A instrumentation, and programmable power supplies to automate sequencing, gate-bias regulation, drain-current monitoring, and CSV logging.",
@@ -155,46 +138,6 @@ export const resumeData = {
       ],
     },
   ] satisfies ExperienceEntry[],
-  projects: [
-    {
-      id: "mtp-lite",
-      title: "MTP Lite: Proprietary Long-Read Genome Assembly Pipeline",
-      organization: "Lonardi Lab, University of California, Riverside",
-      role: "Undergraduate Student Researcher — Computational Biology and Bioinformatics",
-      location: "Riverside, CA",
-      dates: "June 2025 – Present",
-      experienceId: "lonardi-lab",
-      technologies: ["Python", "NumPy", "Bash", "Linux"],
-      relatedWork: {
-        label: "Read the research overview",
-        href: "/research/optimal-read-selection",
-      },
-      highlights: [
-        "Designed and developed an internal bioinformatics tool for selecting informative long reads for targeted genome assembly.",
-        "Implemented scalable read selection, overlap analysis, and assembly-preparation workflows using Python, NumPy, Bash, and Linux tools.",
-        "Substantially reduced sequencing input while maintaining high-quality target-region assembly in internal benchmarks. Technical details, benchmark data, and source code are confidential to Lonardi Lab.",
-      ],
-    },
-    {
-      id: "hastest-control-suite",
-      title: "Hastest DAC, DAQ, and Power Supply Control Suite",
-      organization: "Hastest Solutions, Inc.",
-      role: "Software Engineer Intern",
-      location: "San Jose, CA",
-      dates: "June 2024 – August 2024",
-      experienceId: "hastest",
-      technologies: ["Python", "FTDI MPSSE", "SPI", "VISA"],
-      relatedWork: {
-        label: "Read the project details",
-        href: "/projects/hastest-control-suite",
-      },
-      highlights: [
-        "Designed a five-layer FTDI MPSSE stack enabling register-level bit-field access for a 16-channel DAC/ADC.",
-        "Built a full-duplex SPI driver over FTDI MPSSE with configurable chip select, three- and four-wire modes, and dual-port support.",
-        "Developed a VISA driver library and test orchestration for DAQ and Keysight power supplies, including binary-search voltage control.",
-      ],
-    },
-  ] satisfies ResumeProject[],
   skills: [
     {
       category: "Languages",

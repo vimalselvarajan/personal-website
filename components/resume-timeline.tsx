@@ -182,9 +182,11 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
                           </span>
                         ))}
                       </div>
-                      <Link href={entry.relatedWork.href} className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-link hover:underline">
-                        {entry.relatedWork.label}<ArrowRight aria-hidden="true" className="size-4" />
-                      </Link>
+                      {entry.relatedWork ? (
+                        <Link href={entry.relatedWork.href} transitionTypes={["nav-forward"]} className="mt-6 inline-flex min-h-11 items-center gap-2 text-sm font-semibold text-link hover:underline">
+                          {entry.relatedWork.label}<ArrowRight aria-hidden="true" className="size-4" />
+                        </Link>
+                      ) : null}
                     </div>
                   </article>
                 </li>

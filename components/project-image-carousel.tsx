@@ -247,50 +247,52 @@ export function ProjectImageCarousel({
           </picture>
         </div>
 
-      <div className="project-carousel-controls">
-        <button
-          type="button"
-          className="project-carousel-control h-11 min-w-11"
-          aria-label="Previous image"
-          onClick={() => selectSlide(activeIndex - 1)}
-        >
-          <ChevronLeft aria-hidden="true" className="size-4" />
-        </button>
-        <p className="project-carousel-caption" aria-live="polite">
+        <div className="project-carousel-navigation">
+          <button
+            type="button"
+            className="project-carousel-control h-11 min-w-11"
+            aria-label="Previous image"
+            onClick={() => selectSlide(activeIndex - 1)}
+          >
+            <ChevronLeft aria-hidden="true" className="size-4" />
+          </button>
+          <button
+            type="button"
+            className="project-carousel-control h-11 min-w-11"
+            aria-label="Next image"
+            onClick={() => selectSlide(activeIndex + 1)}
+          >
+            <ChevronRight aria-hidden="true" className="size-4" />
+          </button>
+        </div>
+      </div>
+      <div className="project-carousel-dock">
+        <p className="project-carousel-caption" aria-live="polite" aria-atomic="true">
           <span>{activeSlide.caption}</span>
           <span aria-hidden="true">{String(activeIndex + 1).padStart(2, "0")} / {String(slides.length).padStart(2, "0")}</span>
         </p>
-        <button
-          type="button"
-          className="project-carousel-control h-11 min-w-11"
-          aria-label="Next image"
-          onClick={() => selectSlide(activeIndex + 1)}
-        >
-          <ChevronRight aria-hidden="true" className="size-4" />
-        </button>
-      </div>
-      </div>
-      <div className="project-carousel-pagination" aria-label="Choose an image">
-        {slides.map((slide, index) => {
-          const isActive = index === activeIndex;
+        <div className="project-carousel-pagination" aria-label="Choose an image">
+          {slides.map((slide, index) => {
+            const isActive = index === activeIndex;
 
-          return (
-            <button
-              key={slide.src}
-              type="button"
-              className="grid min-h-11 min-w-11 place-items-center rounded-full"
-              aria-label={`Show image ${index + 1}: ${slide.caption}`}
-              aria-current={isActive ? "true" : undefined}
-              onClick={() => setActiveIndex(index)}
-            >
-              <span
-                aria-hidden="true"
+            return (
+              <button
+                key={slide.src}
+                type="button"
+                className="grid min-h-11 min-w-11 place-items-center rounded-full"
+                aria-label={`Show image ${index + 1}: ${slide.caption}`}
                 aria-current={isActive ? "true" : undefined}
-                className="project-carousel-dot block"
-              />
-            </button>
-          );
-        })}
+                onClick={() => setActiveIndex(index)}
+              >
+                <span
+                  aria-hidden="true"
+                  aria-current={isActive ? "true" : undefined}
+                  className="project-carousel-dot block"
+                />
+              </button>
+            );
+          })}
+        </div>
       </div>
     </section>
   );

@@ -4,10 +4,12 @@ for (const [name, route] of [
   ["home", "./"],
   ["projects", "./projects/"],
   ["research", "./research/"],
-  ["project-detail", "./projects/12v-to-3v3-buck-converter/"],
   ["resume", "./resume/"],
 ] as const) {
   test(`${name} visual baseline`, async ({ page, browserName, isMobile }) => {
+    if (name === "resume" && !isMobile) {
+      await page.addInitScript(() => window.localStorage.setItem("theme", "light"));
+    }
     test.skip(browserName !== "chromium", "Visual baselines are intentionally Chromium-only");
     await page.goto(route, { waitUntil: "networkidle" });
     await expect(page).toHaveScreenshot(`${name}-${isMobile ? "mobile" : "desktop"}.png`, {

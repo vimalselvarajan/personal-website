@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { ContentMeta } from "@/components/content-meta";
 import { Container } from "@/components/container";
 import { MarkdownContent } from "@/components/markdown-content";
+import { ResearchImage } from "@/components/research-image";
 import { contentRepository } from "@/lib/content";
 import { createContentMetadata } from "@/lib/content-route";
 import { contentRoute } from "@/lib/routes";
@@ -62,6 +63,18 @@ export default async function ResearchDetailPage({ params }: Props) {
       </header>
 
       <Container>
+        {entry.frontmatter.image ? (
+          <figure className="mt-10 overflow-hidden rounded-2xl border border-border bg-white p-2 shadow-[var(--surface-shadow)] sm:mt-14">
+            <ResearchImage
+              research={entry.frontmatter}
+              sizes="(min-width: 1280px) 1120px, calc(100vw - 4rem)"
+              className="h-auto w-full rounded-xl"
+            />
+            <figcaption className="px-3 pb-2 pt-4 text-sm text-slate-600">
+              MTP Lite genome assembly optimization poster
+            </figcaption>
+          </figure>
+        ) : null}
         <div className="record-body-grid">
           <div className="record-body-copy">
             <MarkdownContent source={entry.source} route={contentRoute("research", slug)} />

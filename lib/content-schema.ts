@@ -7,6 +7,7 @@ const positiveInteger = z.number().int().positive();
 const httpsUrl = z.string().url().refine((value) => new URL(value).protocol === "https:", "must use HTTPS");
 const githubUrl = httpsUrl.refine((value) => new URL(value).hostname === "github.com", "must use github.com");
 const projectImage = z.string().regex(/^\/projects\/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)$/i, "must reference a project image");
+const researchImage = z.string().regex(/^\/research\/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)$/i, "must reference a research image");
 const projectImageAsset = z.object({
   src: projectImage,
   width: positiveInteger,
@@ -41,7 +42,26 @@ export const researchFrontmatterSchema = commonFrontmatterSchema.extend({
   researchArea: nonEmptyString,
   tools: nonEmptyStrings,
   affiliation: nonEmptyString,
-}).strict();
+  image: researchImage.optional(),
+  imageAlt: nonEmptyString.optional(),
+  imageWidth: positiveInteger.optional(),
+  imageHeight: positiveInteger.optional(),
+}).strict().superRefine((frontmatter, context) => {
+  const imageFields = [
+    frontmatter.image,
+    frontmatter.imageAlt,
+    frontmatter.imageWidth,
+    frontmatter.imageHeight,
+  ];
+  const providedFields = imageFields.filter((value) => value !== undefined);
+  if (providedFields.length > 0 && providedFields.length < imageFields.length) {
+    context.addIssue({
+      code: "custom",
+      path: ["image"],
+      message: "research image metadata must include image, imageAlt, imageWidth, and imageHeight",
+    });
+  }
+});
 
 export const contentKinds = ["projects", "research"] as const;
 export type ContentKind = (typeof contentKinds)[number];

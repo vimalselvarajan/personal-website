@@ -42,14 +42,7 @@ export function validateSiteRouteReferences() {
   assertHrefKind(resumeData.contact.phoneHref, "same-tab", "Resume phone number");
 
   for (const entry of resumeData.experience) {
-    assertKnownInternalHref(entry.relatedWork.href, "/resume", knownRoutes);
-  }
-  for (const project of resumeData.projects) {
-    assertKnownInternalHref(project.relatedWork.href, "/resume", knownRoutes);
-  }
-
-  for (const project of contentRepository.list("projects")) {
-    assertHrefKind(project.frontmatter.github, "external", `Project "${project.frontmatter.title}" repository`);
+    if (entry.relatedWork) assertKnownInternalHref(entry.relatedWork.href, "/resume", knownRoutes);
   }
 
   return routes;

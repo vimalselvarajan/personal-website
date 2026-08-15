@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowRight, FlaskConical } from "lucide-react";
 import { Container } from "@/components/container";
 import { Badge } from "@/components/ui/badge";
+import { ResearchImage } from "@/components/research-image";
 import { contentRepository } from "@/lib/content";
 import { createPageMetadata } from "@/lib/metadata";
 
@@ -28,13 +29,13 @@ export default function ResearchPage() {
   return (
       <section aria-labelledby="research-page-heading" className="atlas-page">
       <Container className="pb-16 sm:pb-24">
-        <header className="atlas-heading">
+        <header className="atlas-heading research-heading">
           <div className="flex items-center gap-3">
             <FlaskConical aria-hidden="true" className="size-5 text-link" />
             <p className="eyebrow">Research at UC Riverside</p>
           </div>
           <h1 id="research-page-heading">Research with measurable outcomes.</h1>
-          <p className="mt-6 max-w-2xl text-pretty text-lg leading-8 text-muted-foreground">
+          <p className="research-heading-copy text-pretty text-muted-foreground">
             Computational genomics, microarchitecture simulation, and secure systems—presented by result, method, and current direction.
           </p>
           <div className="atlas-register">Research collection</div>
@@ -77,6 +78,15 @@ export default function ResearchPage() {
               </div>
             </dl>
           </div>
+          {mtpLite.frontmatter.image ? (
+            <figure className="mt-10 overflow-hidden rounded-2xl border border-border bg-white p-2">
+              <ResearchImage
+                research={mtpLite.frontmatter}
+                sizes="(min-width: 1280px) 1120px, calc(100vw - 4rem)"
+                className="h-auto w-full rounded-xl"
+              />
+            </figure>
+          ) : null}
         </section>
 
         <section aria-labelledby="current-directions-heading" className="research-compact-section mt-16 sm:mt-24">

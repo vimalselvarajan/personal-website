@@ -32,7 +32,7 @@ export async function getSitemapPaths(request: APIRequestContext) {
   const xml = await response.text();
   const matches = [...xml.matchAll(/<loc>(.*?)<\/loc>/g)];
   expect(matches.length, "sitemap route count").toBeGreaterThan(0);
-  expect(publicRoutes, "committed public route manifest").toHaveLength(12);
+  expect(publicRoutes, "committed public route manifest").toHaveLength(13);
 
   const locations = matches.map((match) => {
     const location = match[1];

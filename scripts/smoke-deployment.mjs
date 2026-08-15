@@ -112,8 +112,7 @@ const profileAssets = [384, 640, 768, 1024, 1280].flatMap((width) =>
   ["avif", "webp", "jpg"].map((format) => `profile/profile-${width}.${format}`),
 );
 for (const asset of [
-  "robots.txt", "sitemap.xml", "icon.svg", "projects/12v-to-3v3-buck-converter.png",
-  "projects/responsive/12v-to-3v3-buck-converter-640.webp",
+  "robots.txt", "sitemap.xml", "icon.svg", "research/mtp-lite-genome-assembly-poster.jpg",
   ...profileAssets,
 ]) {
   await fetchWithRetry(asset);

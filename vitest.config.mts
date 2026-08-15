@@ -15,7 +15,6 @@ export default defineConfig({
         "lib/image-dimensions.ts",
         "lib/links.ts",
         "lib/metadata.ts",
-        "lib/project-image-variants.ts",
         "lib/routes.ts",
         "scripts/lighthouse-image-audit.mjs",
         "scripts/serve-export.mjs",

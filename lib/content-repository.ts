@@ -13,6 +13,7 @@ export type ContentEntry<K extends ContentKind> = {
 type RepositoryOptions = {
   contentRoot: string;
   publicRoot: string;
+  cache?: boolean;
 };
 
 function describeError(error: unknown, file: string) {
@@ -34,12 +35,34 @@ function assertUnique<K extends ContentKind>(
   }
 }
 
-export function createContentRepository({ contentRoot, publicRoot }: RepositoryOptions) {
+function assertImageAsset(
+  asset: { src: string; width: number; height: number },
+  file: string,
+  publicRoot: string,
+  kind: "project" | "research",
+) {
+  const imageFile = path.join(publicRoot, asset.src.slice(1));
+  if (!fs.existsSync(imageFile)) throw new Error(`Missing ${kind} image ${asset.src} referenced by ${file}`);
+  const dimensions = readImageDimensions(fs.readFileSync(imageFile), imageFile);
+  if (dimensions.width !== asset.width || dimensions.height !== asset.height) {
+    throw new Error(
+      `Image dimensions for ${asset.src} are ${dimensions.width}x${dimensions.height}; expected ${asset.width}x${asset.height}`,
+    );
+  }
+}
+
+export function createContentRepository({
+  contentRoot,
+  publicRoot,
+  cache: cacheEnabled = true,
+}: RepositoryOptions) {
   const cache = new Map<ContentKind, readonly ContentEntry<ContentKind>[]>();
 
   function load<K extends ContentKind>(kind: K): readonly ContentEntry<K>[] {
-    const cached = cache.get(kind);
-    if (cached) return cached as readonly ContentEntry<K>[];
+    if (cacheEnabled) {
+      const cached = cache.get(kind);
+      if (cached) return cached as readonly ContentEntry<K>[];
+    }
 
     const directory = path.join(contentRoot, kind);
     const entries = fs.readdirSync(directory)
@@ -66,13 +89,18 @@ export function createContentRepository({ contentRoot, publicRoot }: RepositoryO
             { src: project.image, width: project.imageWidth, height: project.imageHeight },
             ...(project.cardImage ? [project.cardImage] : []),
           ];
-          for (const asset of assets) {
-            const imageFile = path.join(publicRoot, asset.src.slice(1));
-            if (!fs.existsSync(imageFile)) throw new Error(`Missing project image ${asset.src} referenced by ${file}`);
-            const dimensions = readImageDimensions(fs.readFileSync(imageFile), imageFile);
-            if (dimensions.width !== asset.width || dimensions.height !== asset.height) {
-              throw new Error(`Image dimensions for ${asset.src} are ${dimensions.width}x${dimensions.height}; expected ${asset.width}x${asset.height}`);
-            }
+          for (const asset of assets) assertImageAsset(asset, file, publicRoot, "project");
+        }
+
+        if (kind === "research") {
+          const research = frontmatter as ContentMetaMap["research"];
+          if (research.image && research.imageWidth && research.imageHeight) {
+            assertImageAsset(
+              { src: research.image, width: research.imageWidth, height: research.imageHeight },
+              file,
+              publicRoot,
+              "research",
+            );
           }
         }
 
@@ -84,7 +112,9 @@ export function createContentRepository({ contentRoot, publicRoot }: RepositoryO
     assertUnique(entries, "order", kind);
     if (kind === "projects") assertUnique(entries, "summary", kind);
 
-    cache.set(kind, entries as readonly ContentEntry<ContentKind>[]);
+    if (cacheEnabled) {
+      cache.set(kind, entries as readonly ContentEntry<ContentKind>[]);
+    }
     return entries;
   }
 

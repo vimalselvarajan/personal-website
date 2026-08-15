@@ -8,4 +8,5 @@ export type { ContentKind, ProjectFrontmatter, ResearchFrontmatter } from "@/lib
 export const contentRepository = createContentRepository({
   contentRoot: path.join(process.cwd(), "content"),
   publicRoot: path.join(process.cwd(), "public"),
+  cache: process.env.NODE_ENV !== "development",
 });

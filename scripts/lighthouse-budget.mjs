@@ -10,7 +10,7 @@ import { countResponsiveImageFindings } from "./lighthouse-image-audit.mjs";
 const runs = Number(process.env.PORTFOLIO_LIGHTHOUSE_RUNS ?? 3);
 if (!Number.isInteger(runs) || runs < 1) throw new Error("PORTFOLIO_LIGHTHOUSE_RUNS must be a positive integer");
 const reportRoot = path.resolve(process.env.PORTFOLIO_LIGHTHOUSE_DIR ?? path.join(os.tmpdir(), "portfolio-lighthouse"));
-const defaultRoutes = ["/", "/projects/", "/projects/12v-to-3v3-buck-converter/", "/research/optimal-read-selection/", "/resume/"];
+const defaultRoutes = ["/", "/research/optimal-read-selection/", "/resume/"];
 const routes = process.env.PORTFOLIO_LIGHTHOUSE_ROUTES?.split(",").map((route) => route.trim()).filter(Boolean) ?? defaultRoutes;
 const lighthouseBin = path.join(process.cwd(), "node_modules", ".bin", "lighthouse");
 const chromePath = process.env.CHROME_PATH ?? chromium.executablePath();

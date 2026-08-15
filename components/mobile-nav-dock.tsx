@@ -18,7 +18,7 @@ function DockIcon({ label }: { label: string }) {
     ? FolderKanban
     : label === "Research"
       ? FlaskConical
-      : label === "R\u00e9sum\u00e9"
+      : label === "Résumé"
         ? FileText
         : House;
 

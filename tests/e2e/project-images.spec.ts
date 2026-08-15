@@ -51,7 +51,7 @@ test("project index serves active responsive slides and only preloads above-fold
   await page.goto("./projects/");
 
   const cards = page.locator(`section[aria-label="Project index"] article picture:has(img[data-project-card-image])`);
-  await expect(cards).toHaveCount(3);
+  await expect(cards).toHaveCount(4);
 
   const hastestPreload = page.locator(
     'head link[rel="preload"][as="image"][type="image/avif"][imagesrcset*="hastest-control-suite-card-384.avif"]',
@@ -72,6 +72,9 @@ test("project index serves active responsive slides and only preloads above-fold
   const hastestWebpSource = hastestGallery.locator('source[type="image/webp"]');
   const hastestAvifSource = hastestGallery.locator('source[type="image/avif"]');
   const imageButtons = hastestGallery.getByRole("button", { name: /^Show image / });
+  const previousImage = hastestGallery.getByRole("button", { name: "Previous image" });
+  const nextImage = hastestGallery.getByRole("button", { name: "Next image" });
+  const caption = hastestGallery.locator(".project-carousel-caption");
   const expectedResponsiveSlides = [
     "hastest-control-suite-384.webp 384w",
     "hastest-control-suite-gallery-0-384.webp 384w",
@@ -108,14 +111,32 @@ test("project index serves active responsive slides and only preloads above-fold
   }
   await expect(hastestWebpSource).not.toHaveAttribute("srcset", /hastest-control-suite-gallery-4-/);
 
+  await nextImage.click();
+  await expect(imageButtons.first()).toHaveAttribute("aria-current", "true");
+  await expect(caption).toContainText("HTOL fixture overview");
+  await expect(caption).toContainText("01 / 05");
+
+  await previousImage.click();
+  await expect(imageButtons.last()).toHaveAttribute("aria-current", "true");
+  await expect(caption).toContainText("DAQ and power instrumentation");
+  await expect(caption).toContainText("05 / 05");
+
+  await hastestGallery.focus();
+  await hastestGallery.press("Home");
+  await hastestGallery.press("ArrowRight");
+  await expect(imageButtons.nth(1)).toHaveAttribute("aria-current", "true");
+  await expect(caption).toContainText("HTOL validation hardware");
+  await hastestGallery.press("End");
+  await expect(imageButtons.last()).toHaveAttribute("aria-current", "true");
+
   const responsiveAvifSources = await cards.locator('source[type="image/avif"]').evaluateAll(
     (elements) => elements.map((element) => element.getAttribute("srcset") ?? ""),
   );
   const responsiveWebpSources = await cards.locator('source[type="image/webp"]').evaluateAll(
     (elements) => elements.map((element) => element.getAttribute("srcset") ?? ""),
   );
-  expect(responsiveAvifSources).toHaveLength(3);
-  expect(responsiveWebpSources).toHaveLength(3);
+  expect(responsiveAvifSources).toHaveLength(4);
+  expect(responsiveWebpSources).toHaveLength(4);
   expect(responsiveAvifSources.every((source) => (
     /\/projects\/responsive\/[a-z0-9-]+-card-\d+\.avif/.test(source)
   ))).toBe(true);
