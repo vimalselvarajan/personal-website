@@ -35,7 +35,7 @@ npm run test:lighthouse
 
 `npm run validate` checks the toolchain, ESLint, TypeScript, coverage, responsive assets, the production export, and bundle/image budgets. `npm run test:e2e` builds once and tests that export across Chromium desktop/mobile, Firefox, and WebKit. `npm run test:e2e:export` reuses an existing `out/` directory. Lighthouse also reuses `out/` and serves it on an isolated ephemeral port.
 
-Use `npm run assets:generate` only when the source portrait intentionally changes; `npm run assets:check` verifies all 12 profile outputs.
+Use `npm run assets:generate` only when a source profile, project, or research image intentionally changes; `npm run assets:check` verifies every generated responsive image.
 
 ## Content map
 
