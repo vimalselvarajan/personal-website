@@ -550,7 +550,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 [data-scene="hastest-control-suite"] { --scene-accent: oklch(0.55 0.15 245); --scene-wash: oklch(0.68 0.1 245 / 0.18); }
 [data-scene="mini-genome-assembler"] { --scene-accent: oklch(0.52 0.12 310); --scene-wash: oklch(0.66 0.1 310 / 0.18); }
 
-.record-back { display: inline-flex; min-height: 2.75rem; align-items: center; gap: 0.45rem; color: var(--scene-accent); font-size: 0.875rem; font-weight: 650; }
+.record-back { display: inline-flex; min-height: 2.75rem; align-items: center; gap: 0.45rem; color: var(--foreground); font-size: 0.875rem; font-weight: 650; }
 .record-head-grid { display: grid; gap: 2rem; margin-top: clamp(3rem, 8vw, 6.5rem); }
 .record-title { max-width: 9.5ch; text-wrap: balance; font-size: clamp(3.25rem, 8.5vw, 8rem); font-weight: 650; letter-spacing: -0.079em; line-height: 0.86; }
 .record-summary { max-width: 43rem; margin-top: 1.8rem; font-size: clamp(1.05rem, 1.65vw, 1.26rem); line-height: 1.7; color: var(--muted-foreground); }

@@ -1,11 +1,18 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Container } from "@/components/container";
 import { ExternalAnchor } from "@/components/external-link";
-import { siteConfig } from "@/config/site";
+import { siteConfig, visibleNavigationItems } from "@/config/site";
 
 const footerLinkClass = "site-footer-link";
 
 export function SiteFooter() {
+  const pathname = usePathname();
+  const visibleItems = visibleNavigationItems(siteConfig.footerNav, pathname, { includeProjectsOnResume: true });
+  const hidesProjectsOnDesktop = pathname.replace(/\/$/, "") === "/resume";
+
   return (
     <footer id="site-footer" className="site-footer print:hidden">
       <Container className="site-footer-inner max-w-5xl">
@@ -17,8 +24,8 @@ export function SiteFooter() {
           <nav aria-label="Footer" className="site-footer-group">
             <p className="site-footer-heading">Explore</p>
             <ul className="site-footer-list">
-              {siteConfig.footerNav.map((item) => (
-                <li key={item.href}>
+              {visibleItems.map((item) => (
+                <li key={item.href} className={item.label === "Projects" && hidesProjectsOnDesktop ? "lg:hidden" : undefined}>
                   {item.external ? (
                     <ExternalAnchor href={item.href} className={footerLinkClass}>
                       {item.label}

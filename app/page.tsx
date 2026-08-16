@@ -77,8 +77,9 @@ export default function HomePage() {
                 </Link>{" "}
                 and{" "}
                 <Link
-                  href="/research"
-                  transitionTypes={["nav-root"]}
+                  href="/research/optimal-read-selection"
+                  transitionTypes={["nav-forward"]}
+                  aria-label="Read the research overview"
                   className="font-semibold text-link underline-offset-4 hover:underline"
                 >
                   Research

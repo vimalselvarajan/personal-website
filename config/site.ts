@@ -55,6 +55,18 @@ export const siteConfig = {
   ] satisfies NavItem[],
 } as const;
 
+type NavigationVisibilityOptions = { includeProjectsOnResume?: boolean };
+
+export function visibleNavigationItems<T extends NavItem>(
+  items: readonly T[],
+  pathname: string,
+  { includeProjectsOnResume = false }: NavigationVisibilityOptions = {},
+) {
+  const normalizedPathname = pathname.replace(/\/$/, "");
+  const hidesProjects = (!includeProjectsOnResume && normalizedPathname === "/resume") || normalizedPathname.startsWith("/research/");
+  return hidesProjects ? items.filter((item) => item.label !== "Projects") : items;
+}
+
 export function absoluteUrl(path = "") {
   return `${siteConfig.metadata.baseUrl}${path}`;
 }
