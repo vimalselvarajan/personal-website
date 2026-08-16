@@ -18,6 +18,7 @@ describe("project image variants", () => {
 
   it("keeps card density targets separate from detail-image candidates", () => {
     expect(getProjectCardImageVariantWidths(1255)).toEqual([384, 672, 960, 1255]);
+    expect(getProjectCardImageVariantWidths(2500)).toEqual([384, 672, 960, 1280]);
     expect(getProjectCardImageVariantWidths(800)).toEqual([384, 672, 800]);
     expect(getProjectCardImageVariantWidths(608)).toEqual([384, 608]);
   });

@@ -150,13 +150,16 @@ async function generateAssets(projects) {
               ? { lossless: true, effort: 6 }
               : { quality: 88, effort: 6, smartSubsample: false }).toBuffer();
           if (isIntrinsicDetail && buffer.byteLength > maximumDetailBytes) {
-            buffer = await sharp(image.sourcePath)
-              .resize({ width, withoutEnlargement: true })
-              .webp({ quality: 95, effort: 6, smartSubsample: false })
-              .toBuffer();
+            for (const quality of [95, 90, 85, 80, 75, 70, 65, 60, 55, 50, 45, 40, 35, 30, 25, 20, 15, 10]) {
+              buffer = await sharp(image.sourcePath)
+                .resize({ width, withoutEnlargement: true })
+                .webp({ quality, effort: 6, smartSubsample: false })
+                .toBuffer();
+              if (buffer.byteLength <= maximumDetailBytes) break;
+            }
           }
           if (image.kind === "card" && format === "avif" && buffer.byteLength > maximumBytesFor(image, width, format)) {
-            for (const quality of [55, 50, 45, 40]) {
+            for (const quality of [55, 50, 45, 40, 35, 30, 25, 20]) {
               buffer = await sharp(image.sourcePath)
                 .resize({ width, withoutEnlargement: true })
                 .avif({
@@ -171,10 +174,13 @@ async function generateAssets(projects) {
             }
           }
           if (image.kind === "card" && format === "webp" && buffer.byteLength > maximumCardBytes) {
-            buffer = await sharp(image.sourcePath)
-              .resize({ width, withoutEnlargement: true })
-              .webp({ quality: 82, effort: 6, smartSubsample: false })
-              .toBuffer();
+            for (const quality of [82, 76, 70, 64, 58, 52, 46, 40, 34, 28, 22]) {
+              buffer = await sharp(image.sourcePath)
+                .resize({ width, withoutEnlargement: true })
+                .webp({ quality, effort: 6, smartSubsample: false })
+                .toBuffer();
+              if (buffer.byteLength <= maximumCardBytes) break;
+            }
           }
           const metadata = await sharp(buffer).metadata();
           const failures = validateMetadata(image, width, format, metadata, buffer.byteLength);

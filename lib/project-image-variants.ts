@@ -1,5 +1,6 @@
 const projectDetailImageCandidateWidths = [384, 640, 960] as const;
 const projectCardImageCandidateWidths = [384, 672, 960] as const;
+const projectCardImageMaximumWidth = 1280;
 
 export type ProjectCardImageFormat = "avif" | "webp";
 
@@ -23,12 +24,17 @@ function assertPositiveInteger(value: number, label: string) {
   }
 }
 
-function getVariantWidths(sourceWidth: number, candidateWidths: readonly number[]) {
+function getVariantWidths(
+  sourceWidth: number,
+  candidateWidths: readonly number[],
+  maximumWidth = sourceWidth,
+) {
   assertPositiveInteger(sourceWidth, "Project image width");
+  const largestWidth = Math.min(sourceWidth, maximumWidth);
 
   return [
-    ...candidateWidths.filter((width) => width < sourceWidth),
-    sourceWidth,
+    ...candidateWidths.filter((width) => width < largestWidth),
+    largestWidth,
   ];
 }
 
@@ -37,7 +43,11 @@ export function getProjectImageVariantWidths(sourceWidth: number) {
 }
 
 export function getProjectCardImageVariantWidths(sourceWidth: number) {
-  return getVariantWidths(sourceWidth, projectCardImageCandidateWidths);
+  return getVariantWidths(
+    sourceWidth,
+    projectCardImageCandidateWidths,
+    projectCardImageMaximumWidth,
+  );
 }
 
 export function getProjectImageVariantPath(slug: string, width: number) {
