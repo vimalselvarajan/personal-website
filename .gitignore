@@ -13,3 +13,6 @@ test-results/
 .env*
 !.env.example
 public/resume.pdf
+AGENTS.md
+CLAUDE.md
+RESUME.md
