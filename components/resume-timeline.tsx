@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, BriefcaseBusiness, FlaskConical, MapPin } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { cn } from "@/lib/utils";
 import type { ExperienceEntry, ExperienceId } from "@/lib/resume-data";
@@ -13,9 +13,10 @@ type ResumeTimelineProps = {
 
 export function ResumeTimeline({ entries }: ResumeTimelineProps) {
   const [activeId, setActiveId] = useState<ExperienceId | undefined>(entries[0]?.id);
+  const timelineIndexRef = useRef<HTMLDivElement>(null);
+  const timelineSelectionRef = useRef<HTMLSpanElement>(null);
   const activeIndex = Math.max(0, entries.findIndex((entry) => entry.id === activeId));
   const activeEntry = entries[activeIndex];
-  const progress = entries.length > 1 ? (activeIndex / (entries.length - 1)) * 100 : 0;
   const entryIds = useMemo(() => entries.map((entry) => entry.id), [entries]);
 
   useEffect(() => {
@@ -45,6 +46,34 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
     return () => observer.disconnect();
   }, [entryIds]);
 
+  useLayoutEffect(() => {
+    const index = timelineIndexRef.current;
+    const selection = timelineSelectionRef.current;
+    if (!index || !selection || !activeId) return;
+
+    const updateSelection = () => {
+      const activeItem = index.querySelector<HTMLElement>(`[data-timeline-index-entry="${activeId}"]`);
+      if (!activeItem) return;
+
+      const indexBounds = index.getBoundingClientRect();
+      const itemBounds = activeItem.getBoundingClientRect();
+      selection.style.height = `${itemBounds.height}px`;
+      selection.style.transform = `translate3d(0, ${itemBounds.top - indexBounds.top}px, 0)`;
+      selection.dataset.ready = "true";
+    };
+
+    updateSelection();
+
+    const resizeObserver = new ResizeObserver(updateSelection);
+    resizeObserver.observe(index);
+    window.addEventListener("resize", updateSelection);
+
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener("resize", updateSelection);
+    };
+  }, [activeId]);
+
   return (
     <section id="professional-experience" aria-labelledby="professional-experience-heading" className="scroll-mt-24 py-20 sm:py-24">
       <div className="max-w-3xl">
@@ -56,39 +85,25 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
 
       <div className="mt-12 lg:grid lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-14 xl:gap-20">
         <aside className="resume-timeline-index relative hidden lg:block print:hidden">
-          <nav aria-label="Career timeline" className="sticky top-28 rounded-[1.5rem] border border-border bg-surface p-6 shadow-sm">
+          <nav aria-label="Career timeline" className="resume-timeline-index-panel sticky top-28 rounded-[1.5rem] border border-border bg-surface p-6 shadow-sm">
             <p className="text-xs font-bold uppercase tracking-[0.13em] text-subtle">Trajectory</p>
-            <div className="relative mt-6">
-              <span aria-hidden="true" className="absolute bottom-3 left-[0.4375rem] top-3 w-px bg-border" />
-              <span
-                aria-hidden="true"
-                className="absolute left-[0.4375rem] top-3 w-px bg-link transition-[height] duration-300 motion-reduce:transition-none"
-                style={{ height: `${progress}%` }}
-              />
+            <div ref={timelineIndexRef} className="resume-timeline-index-track relative mt-6">
+              <span ref={timelineSelectionRef} aria-hidden="true" className="resume-timeline-index-selection" />
               <ol className="space-y-1">
-                {entries.map((entry, index) => {
+                {entries.map((entry) => {
                   const isActive = entry.id === activeId;
-                  const isReached = index <= activeIndex;
 
                   return (
-                    <li key={entry.id} className="relative">
+                    <li key={entry.id} data-timeline-index-entry={entry.id} className="resume-timeline-index-entry relative">
                       <a
                         href={`#experience-${entry.id}`}
                         aria-current={isActive ? "location" : undefined}
                         onClick={() => setActiveId(entry.id)}
                         className={cn(
-                          "group grid min-h-16 grid-cols-[1rem_1fr] items-center gap-3 rounded-xl px-1 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                          "resume-timeline-index-link block min-h-16 rounded-xl px-3 py-2 text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
                           isActive ? "text-foreground" : "text-muted-foreground hover:text-foreground",
                         )}
                       >
-                        <span
-                          aria-hidden="true"
-                          className={cn(
-                            "relative z-10 size-4 rounded-full border-2 bg-surface transition-colors motion-reduce:transition-none",
-                            isReached ? "border-link" : "border-border group-hover:border-subtle",
-                            isActive && "bg-link shadow-[0_0_0_4px_var(--muted)]",
-                          )}
-                        />
                         <span>
                           <span className="block text-sm font-semibold">{entry.shortLabel}</span>
                           <span className="mt-0.5 block text-xs text-muted-foreground">{entry.dates}</span>
@@ -106,17 +121,21 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
           <div
             aria-hidden="true"
             data-active-timeline-label={activeEntry?.id}
-            className="resume-timeline-status sticky top-16 z-20 -mx-5 mb-8 border-y border-border bg-background/90 px-5 py-3 backdrop-blur-xl sm:-mx-8 sm:px-8 lg:hidden print:hidden"
+            className="resume-timeline-status sticky top-16 z-20 -mx-5 mb-8 px-5 sm:-mx-8 sm:px-8 lg:hidden print:hidden"
           >
-            <div className="mx-auto flex max-w-2xl items-center justify-between gap-4">
-              <span className="text-xs font-bold uppercase tracking-[0.12em] text-link">Now viewing</span>
-              <span className="truncate text-sm font-semibold">{activeEntry?.shortLabel}</span>
+            <div className="resume-timeline-status-capsule mx-auto flex max-w-2xl items-center justify-between gap-4">
+              <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-link">
+                <span className="resume-timeline-status-dot size-2 rounded-full" />
+                Now viewing
+              </span>
+              <span key={activeEntry?.id} className="resume-timeline-status-name truncate text-sm font-semibold motion-reduce:animate-none">{activeEntry?.shortLabel}</span>
             </div>
           </div>
 
-          <ol className="resume-timeline-list relative space-y-8 before:absolute before:bottom-0 before:left-[0.4375rem] before:top-0 before:w-px before:bg-border lg:space-y-12 lg:before:hidden">
+          <ol className="resume-timeline-list relative space-y-8 before:absolute before:bottom-0 before:left-[0.4375rem] before:top-0 before:w-px lg:space-y-12 lg:before:hidden">
             {entries.map((entry, index) => {
               const isActive = entry.id === activeId;
+              const isReached = index <= activeIndex;
               const Icon = entry.kind === "research" ? FlaskConical : BriefcaseBusiness;
 
               return (
@@ -129,15 +148,16 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
                   <span
                     aria-hidden="true"
                     className={cn(
-                      "resume-timeline-marker absolute left-0 top-8 z-10 size-4 rounded-full border-2 bg-background transition-colors motion-reduce:transition-none lg:hidden",
-                      isActive ? "border-link bg-link shadow-[0_0_0_4px_var(--muted)]" : "border-border",
+                      "resume-timeline-marker absolute left-0 top-8 z-10 size-4 rounded-full border-2 transition-colors motion-reduce:transition-none lg:hidden",
+                      isReached ? "border-link bg-link/15" : "border-border bg-background",
+                      isActive && "is-active bg-link",
                     )}
                   />
                   <article
                     aria-labelledby={`experience-${entry.id}-heading`}
                     className={cn(
-                      "resume-timeline-card rounded-[1.75rem] border bg-surface p-6 transition-[border-color,box-shadow,transform] duration-300 motion-reduce:transition-none sm:p-8",
-                      isActive ? "border-link/45 shadow-[0_20px_60px_-40px_var(--link)] lg:-translate-y-1" : "border-border shadow-sm",
+                      "resume-timeline-card rounded-[1.75rem] border bg-surface p-6 transition-[background-color,border-color,box-shadow] duration-300 motion-reduce:transition-none sm:p-8",
+                      isActive ? "is-active border-link/45 shadow-[0_20px_60px_-40px_var(--link)]" : "border-border shadow-sm",
                     )}
                   >
                     <div className="flex flex-wrap items-center justify-between gap-3">

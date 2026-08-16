@@ -62,6 +62,41 @@ test("home actions are branded, accessible icon links", async ({ page }) => {
   await expect(page).toHaveURL(/resume/);
 });
 
+test("interior pages expose compact footer navigation", async ({ page }) => {
+  await page.goto("./projects/");
+
+  const footer = page.locator("#site-footer");
+  await expect(footer).toBeVisible();
+
+  const explore = footer.getByRole("navigation", { name: "Footer" });
+  const connect = footer.getByRole("navigation", { name: "Contact and social links" });
+  await expect(explore.getByRole("link")).toHaveCount(5);
+  await expect(connect.getByRole("link")).toHaveCount(3);
+
+  for (const label of ["Home", "Projects", "Research", "About", "Résumé"]) {
+    await expect(explore.getByRole("link", { name: label, exact: true })).toBeVisible();
+  }
+
+  await expect(connect.getByRole("link", { name: "Email", exact: true })).toHaveAttribute("href", "mailto:vimalselvarajan@gmail.com");
+  for (const label of ["GitHub", "LinkedIn"]) {
+    const link = connect.getByRole("link", { name: `${label} (opens in a new tab)` });
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  }
+
+  const targetHeights = await footer.getByRole("link").evaluateAll((links) => links.map((link) => link.getBoundingClientRect().height));
+  expect(targetHeights.every((height) => height >= 44)).toBe(true);
+
+  const results = await new AxeBuilder({ page }).include("#site-footer").analyze();
+  expect(normalizedViolations(results)).toEqual([]);
+
+  await page.evaluate(() => window.localStorage.setItem("theme", "dark"));
+  await page.reload();
+  await expect(page.locator("html")).toHaveClass(/dark/);
+  const darkResults = await new AxeBuilder({ page }).include("#site-footer").analyze();
+  expect(normalizedViolations(darkResults)).toEqual([]);
+});
+
 test("nested research routes keep their collection tab active", async ({ page, isMobile }) => {
   await page.goto("./research/optimal-read-selection/");
   const navigation = page.getByRole("navigation", { name: isMobile ? "Mobile primary" : "Primary" });
@@ -128,6 +163,42 @@ test("résumé preserves research links but omits removed project links", async 
   await expect(lonardi.getByRole("link", { name: "Explore MTP Lite research" })).toHaveAttribute("href", /\/research\/optimal-read-selection\/$/);
   await expect(page.locator("#experience-hastest").getByRole("link")).toHaveCount(0);
   await expect(page.getByRole("link", { name: "Projects", exact: true })).toHaveCount(0);
+});
+
+
+test("resume presentation card links safely to the selected presentation", async ({ page }) => {
+  await page.goto("./resume/");
+
+  const presentation = page.locator("a.resume-presentation");
+  await expect(presentation).toHaveAttribute("href", "https://lnkd.in/p/gm5TMYcZ");
+  await expect(presentation).toHaveAttribute("target", "_blank");
+  await expect(presentation).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(presentation).toContainText("Genome Assembly Optimization Using k-mer-Based Read Selection");
+});
+test("desktop career timeline maintains one active destination", async ({ page, isMobile }) => {
+  test.skip(isMobile, "Desktop career index behavior");
+  await page.goto("./resume/");
+
+  const timeline = page.getByRole("navigation", { name: "Career timeline" });
+  const lonardi = timeline.getByRole("link", { name: /Lonardi Lab/ });
+  await expect(timeline.locator(".resume-timeline-index-rail")).toHaveCount(0);
+  await expect(timeline.locator(".resume-timeline-index-progress")).toHaveCount(0);
+  await expect(timeline.locator(".resume-timeline-index-marker")).toHaveCount(0);
+  await expect(timeline.locator('[aria-current="location"]')).toHaveCount(1);
+  await lonardi.click();
+
+  await expect(page).toHaveURL(/#experience-lonardi-lab$/);
+  await expect(lonardi).toHaveAttribute("aria-current", "location");
+  await expect(timeline.locator('[aria-current="location"]')).toHaveCount(1);
+});
+
+test("mobile career timeline status follows the visible role", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "Mobile career timeline behavior");
+  await page.goto("./resume/");
+
+  await expect(page.locator(".resume-timeline-marker")).toHaveCount(4);
+  await page.locator("#experience-lonardi-lab").evaluate((entry) => entry.scrollIntoView({ block: "start" }));
+  await expect.poll(() => page.locator(".resume-timeline-status").getAttribute("data-active-timeline-label")).toBe("lonardi-lab");
 });
 
 test("Resume uses a paper-white light theme and retains its dark hero", async ({ page, isMobile }) => {

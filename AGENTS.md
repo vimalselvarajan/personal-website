@@ -7,3 +7,14 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Local development
+
+This project requires Node.js `24.19.0`. Before running the frontend, select the required version with nvm:
+
+```bash
+nvm use 24.19.0
+npm run dev
+```
+
+If nvm is not loaded in the current shell, run `source ~/.nvm/nvm.sh` first. The development server is available at http://localhost:3000.

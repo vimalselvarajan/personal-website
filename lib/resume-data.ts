@@ -172,6 +172,7 @@ export const resumeData = {
   ] satisfies SkillGroup[],
   presentation: {
     title: "Genome Assembly Optimization Using k-mer-Based Read Selection",
+    href: "https://lnkd.in/p/gm5TMYcZ",
     date: "April 2026",
     event: "CRA UR2PhD Undergraduate Mentoring Workshop & Research Showcase",
     location: "New Orleans, LA",

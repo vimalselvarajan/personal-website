@@ -1,44 +1,58 @@
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { Container } from "@/components/container";
 import { ExternalAnchor } from "@/components/external-link";
 import { siteConfig } from "@/config/site";
 
-const footerLinkClass = "inline-flex min-h-11 items-center gap-1 text-muted-foreground transition-colors hover:text-foreground";
+const footerLinkClass = "site-footer-link";
 
 export function SiteFooter() {
   return (
-    <footer id="site-footer" className="archive-footer print:hidden">
-      <Container className="archive-footer-inner">
-        <div>
-          <p className="archive-footer-name">{siteConfig.name}</p>
-          <p className="mt-2 max-w-xl text-sm leading-6 text-muted-foreground">
-            {siteConfig.role} · Computer architecture, secure systems, computational genomics, and hardware-control software.
-          </p>
+    <footer id="site-footer" className="site-footer print:hidden">
+      <Container className="site-footer-inner max-w-5xl">
+        <div className="site-footer-content">
+          <div className="site-footer-identity">
+            <p className="site-footer-name">{siteConfig.name}</p>
+            <p className="site-footer-role">{siteConfig.role}</p>
+          </div>
+          <nav aria-label="Footer" className="site-footer-group">
+            <p className="site-footer-heading">Explore</p>
+            <ul className="site-footer-list">
+              {siteConfig.footerNav.map((item) => (
+                <li key={item.href}>
+                  {item.external ? (
+                    <ExternalAnchor href={item.href} className={footerLinkClass}>
+                      {item.label}
+                    </ExternalAnchor>
+                  ) : (
+                    <Link href={item.href} transitionTypes={["nav-root"]} className={footerLinkClass}>
+                      {item.label}
+                    </Link>
+                  )}
+                </li>
+              ))}
+            </ul>
+          </nav>
+          <nav aria-label="Contact and social links" className="site-footer-group">
+            <p className="site-footer-heading">Connect</p>
+            <ul className="site-footer-list">
+              <li>
+                <a href={siteConfig.links.email} className={footerLinkClass}>Email</a>
+              </li>
+              <li>
+                <ExternalAnchor href={siteConfig.links.github} className={footerLinkClass}>
+                  GitHub
+                </ExternalAnchor>
+              </li>
+              <li>
+                <ExternalAnchor href={siteConfig.links.linkedin} className={footerLinkClass}>
+                  LinkedIn
+                </ExternalAnchor>
+              </li>
+            </ul>
+          </nav>
         </div>
-        <div className="archive-footer-links">
-          <nav aria-label="Footer" className="hidden flex-wrap gap-x-5 lg:flex">
-            {siteConfig.footerNav.map((item) => item.external ? (
-              <ExternalAnchor key={item.href} href={item.href} className={footerLinkClass}>
-                {item.label}<ArrowUpRight aria-hidden="true" className="size-3.5" />
-              </ExternalAnchor>
-            ) : (
-              <Link key={item.href} href={item.href} transitionTypes={["nav-root"]} className={footerLinkClass}>
-                {item.label}
-              </Link>
-            ))}
-          </nav>
-          <nav aria-label="Contact and social links" className="flex flex-wrap gap-x-5">
-            <Link href="/about" transitionTypes={["nav-root"]} className={footerLinkClass + " lg:hidden"}>About</Link>
-            <a href={siteConfig.links.email} className={footerLinkClass}>Email</a>
-            <ExternalAnchor href={siteConfig.links.github} className={footerLinkClass}>
-              GitHub <ArrowUpRight aria-hidden="true" className="size-3.5" />
-            </ExternalAnchor>
-            <ExternalAnchor href={siteConfig.links.linkedin} className={footerLinkClass}>
-              LinkedIn <ArrowUpRight aria-hidden="true" className="size-3.5" />
-            </ExternalAnchor>
-          </nav>
-          <p className="text-xs text-subtle">© {new Date().getFullYear()} {siteConfig.name}.</p>
+        <div className="site-footer-legal">
+          <p>Copyright © {new Date().getFullYear()} {siteConfig.name}. All rights reserved.</p>
         </div>
       </Container>
     </footer>
