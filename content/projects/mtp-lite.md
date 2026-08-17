@@ -11,7 +11,7 @@ stack:
   - "QUAST"
   - "Bioinformatics"
 github: "https://github.com/vselv001/mtp-lite"
-image: "/projects/mtp-lite-genome-assembly-poster.jpg"
+image: "/assets/images/projects/originals/mtp-lite-genome-assembly-poster.jpg"
 imageAlt: "Genome assembly poster summarizing the MTP Lite read-selection pipeline and C. elegans chromosome I results"
 imageWidth: 2500
 imageHeight: 1875

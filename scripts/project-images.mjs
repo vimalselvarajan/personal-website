@@ -18,7 +18,7 @@ import {
 const rootDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const projectContentDirectory = path.join(rootDirectory, "content", "projects");
 const publicDirectory = path.join(rootDirectory, "public");
-const outputDirectory = path.join(publicDirectory, "projects", "responsive");
+const outputDirectory = path.join(publicDirectory, "assets", "images", "projects", "responsive");
 const maximumDetailBytes = 200 * 1024;
 const maximumCardBytes = 120 * 1024;
 const maximumResponsiveCardAvifBytes = 17 * 1024;

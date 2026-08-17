@@ -92,7 +92,7 @@ for (const { href } of sitemapLocations) {
   console.log(`PASS ${href}`);
 }
 
-const socialPreviewPath = "social-preview.png";
+const socialPreviewPath = "assets/images/social/social-preview.png";
 const socialImage = await fetchWithRetry(socialPreviewPath);
 const socialContentType = socialImage.headers.get("content-type")?.split(";", 1)[0].trim().toLowerCase();
 if (socialContentType !== "image/png") {
@@ -106,10 +106,10 @@ if (socialDimensions.width !== 1200 || socialDimensions.height !== 630) {
 console.log(`PASS ${new URL(socialPreviewPath, baseUrl)} image/png 1200x630`);
 
 const profileAssets = [384, 640, 768, 1024, 1280].flatMap((width) =>
-  ["avif", "webp", "jpg"].map((format) => `profile/profile-${width}.${format}`),
+  ["avif", "webp", "jpg"].map((format) => `assets/images/profile/profile-${width}.${format}`),
 );
 for (const asset of [
-  "robots.txt", "sitemap.xml", "icon.svg", "research/mtp-lite-genome-assembly-poster.jpg",
+  "robots.txt", "sitemap.xml", "assets/icons/site-icon.svg", "assets/images/research/originals/mtp-lite-genome-assembly-poster.jpg",
   ...profileAssets,
 ]) {
   await fetchWithRetry(asset);

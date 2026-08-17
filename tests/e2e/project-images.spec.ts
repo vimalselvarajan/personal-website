@@ -16,7 +16,7 @@ test("project details serve a right-sized responsive image set", async ({ page, 
   const image = page.locator("article picture img");
   const source = page.locator('article picture source[type="image/webp"]');
   await expect(image).toHaveCount(1);
-  await expect(image).toHaveAttribute("src", "/personal-website/projects/12v-to-3v3-buck-converter.png");
+  await expect(image).toHaveAttribute("src", "/personal-website/assets/images/projects/originals/12v-to-3v3-buck-converter.png");
   await expect(image).toHaveAttribute("width", "1622");
   await expect(image).toHaveAttribute("height", "1159");
   await expect(image).toHaveAttribute("loading", "lazy");
@@ -32,7 +32,7 @@ test("project details serve a right-sized responsive image set", async ({ page, 
     const filename = `12v-to-3v3-buck-converter-${candidate.width}.webp`;
     expect(srcSet, `${candidate.width}w candidate`).toContain(`${filename} ${candidate.width}w`);
 
-    const response = await request.get(`./projects/responsive/${filename}`);
+    const response = await request.get(`./assets/images/projects/responsive/${filename}`);
     expect(response.status(), filename).toBe(200);
     expect(response.headers()["content-type"] ?? "", filename).toContain("image/webp");
     const body = await response.body();
@@ -138,9 +138,9 @@ test("project index serves active responsive slides and only preloads above-fold
   expect(responsiveAvifSources).toHaveLength(4);
   expect(responsiveWebpSources).toHaveLength(4);
   expect(responsiveAvifSources.every((source) => (
-    /\/projects\/responsive\/[a-z0-9-]+-card-\d+\.avif/.test(source)
+    /\/assets\/images\/projects\/responsive\/[a-z0-9-]+-card-\d+\.avif/.test(source)
   ))).toBe(true);
   expect(responsiveWebpSources.every((source) => (
-    /\/projects\/responsive\/[a-z0-9-]+-card-\d+\.webp/.test(source)
+    /\/assets\/images\/projects\/responsive\/[a-z0-9-]+-card-\d+\.webp/.test(source)
   ))).toBe(true);
 });

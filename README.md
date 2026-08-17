@@ -42,13 +42,18 @@ Use `npm run assets:generate` only when a source profile, project, or research i
 | Content | Location |
 | --- | --- |
 | Identity, links, navigation, production URL, and base path | `config/site.ts` |
-| Research entries | `content/research/*.md` |
+| Project and research entries | `content/{projects,research}/*.md` |
+| Project originals and responsive variants | `public/assets/images/projects/{originals,responsive}/` |
+| Research originals and responsive variants | `public/assets/images/research/{originals,responsive}/` |
+| Site icon | `public/assets/icons/site-icon.svg` |
+| Profile source | `assets/source/profile/` |
+| Unused reference media | `assets/reference/presentation.jpg`, `assets/reference/carousel/` |
 | Résumé data | `lib/resume-data.ts` |
-| Responsive profile images | `public/profile/` |
+| Responsive profile images | `public/assets/images/profile/` |
 | Content schemas and repository | `lib/content-schema.ts`, `lib/content.ts` |
 | Route and link validation | `lib/routes.ts`, `lib/site-routes.ts`, `lib/links.ts` |
 | Shared route metadata | `lib/metadata.ts` |
-| Social preview | `public/social-preview.png` |
+| Social preview | `public/assets/images/social/social-preview.png` |
 
 Content is trusted and repository-authored, but it is still rendered as Markdown only: raw HTML and JSX are not executed. Internal content links must resolve to generated routes. External links must be valid HTTPS URLs; protocol-relative, HTTP, executable, credential-bearing, malformed, encoded-control, and control-character URLs are rejected.
 

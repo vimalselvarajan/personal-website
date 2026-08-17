@@ -13,7 +13,7 @@ function makeRepository(files: Record<string, string>, cache = true) {
   const contentDirectory = path.join(root, "content", "research");
   fs.mkdirSync(contentDirectory, { recursive: true });
   for (const [filename, source] of Object.entries(files)) fs.writeFileSync(path.join(contentDirectory, filename), source);
-  const imageRoot = path.join(root, "public", "research");
+  const imageRoot = path.join(root, "public", "assets", "images", "research", "originals");
   fs.mkdirSync(imageRoot, { recursive: true });
   fs.writeFileSync(path.join(imageRoot, "fixture.png"), Buffer.from("iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAusB9Y9Z9S8AAAAASUVORK5CYII=", "base64"));
   return {
@@ -27,7 +27,7 @@ function makeRepository(files: Record<string, string>, cache = true) {
 }
 
 function researchFrontmatter(slug: string, order: number, imageWidth?: number, body = "Body") {
-  const image = imageWidth ? ['image: "/research/fixture.png"', 'imageAlt: "Fixture"', 'imageWidth: ' + imageWidth, 'imageHeight: 1'] : [];
+  const image = imageWidth ? ['image: "/assets/images/research/originals/fixture.png"', 'imageAlt: "Fixture"', 'imageWidth: ' + imageWidth, 'imageHeight: 1'] : [];
   return ['---', 'title: "' + slug + '"', 'slug: "' + slug + '"', 'summary: "Summary"', 'order: ' + order, 'status: "Ongoing"', 'researchArea: "Systems"', 'tools:', '  - "TypeScript"', 'affiliation: "Lab"', ...image, '---', body, ''].join('\n');
 }
 afterEach(() => {

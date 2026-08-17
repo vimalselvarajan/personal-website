@@ -7,7 +7,7 @@ stack:
   - "Altium"
   - "CAD"
 github: "https://github.com/vimalselvarajan/-12V-to-3V3-Buck-Convertor"
-image: "/projects/12v-to-3v3-buck-converter.png"
+image: "/assets/images/projects/originals/12v-to-3v3-buck-converter.png"
 imageAlt: "Top-down CAD rendering of the populated 12-volt to 3.3-volt buck converter circuit board"
 imageWidth: 1622
 imageHeight: 1159

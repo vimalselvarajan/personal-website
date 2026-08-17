@@ -55,7 +55,7 @@ export function getProjectImageVariantPath(slug: string, width: number) {
     throw new Error(`Project image slug must be lowercase kebab-case; received "${slug}"`);
   }
   assertPositiveInteger(width, "Project image variant width");
-  return `/projects/responsive/${slug}-${width}.webp` as const;
+  return `/assets/images/projects/responsive/${slug}-${width}.webp` as const;
 }
 
 export function getProjectGalleryImageVariantPath(slug: string, index: number, width: number) {
@@ -66,7 +66,7 @@ export function getProjectGalleryImageVariantPath(slug: string, index: number, w
     throw new Error(`Project gallery image index must be a non-negative integer; received ${index}`);
   }
   assertPositiveInteger(width, "Project image variant width");
-  return `/projects/responsive/${slug}-gallery-${index}-${width}.webp` as const;
+  return `/assets/images/projects/responsive/${slug}-gallery-${index}-${width}.webp` as const;
 }
 export function getProjectCardImageVariantPath(
   slug: string,
@@ -80,7 +80,7 @@ export function getProjectCardImageVariantPath(
   if (format !== "avif" && format !== "webp") {
     throw new Error(`Project card image format must be avif or webp; received "${format}"`);
   }
-  return `/projects/responsive/${slug}-card-${width}.${format}` as const;
+  return `/assets/images/projects/responsive/${slug}-card-${width}.${format}` as const;
 }
 
 export function getProjectCardImageSizes() {

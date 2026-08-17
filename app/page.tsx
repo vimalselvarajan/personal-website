@@ -14,7 +14,7 @@ const profileSizes = "(min-width: 1280px) 352px, (min-width: 1024px) 304px, calc
 
 function profileSourceSet(extension: "avif" | "webp" | "jpg") {
   return profileWidths
-    .map((width) => `${assetUrl(`/profile/profile-${width}.${extension}`)} ${width}w`)
+    .map((width) => `${assetUrl(`/assets/images/profile/profile-${width}.${extension}`)} ${width}w`)
     .join(", ");
 }
 
@@ -23,7 +23,7 @@ function ProfilePicture() {
   const webpSourceSet = profileSourceSet("webp");
   const jpegSourceSet = profileSourceSet("jpg");
 
-  preload(assetUrl("/profile/profile-1280.avif"), {
+  preload(assetUrl("/assets/images/profile/profile-1280.avif"), {
     as: "image",
     type: "image/avif",
     fetchPriority: "high",
@@ -36,7 +36,7 @@ function ProfilePicture() {
       <source type="image/avif" srcSet={avifSourceSet} sizes={profileSizes} />
       <source type="image/webp" srcSet={webpSourceSet} sizes={profileSizes} />
       <img
-        src={assetUrl("/profile/profile-1280.jpg")}
+        src={assetUrl("/assets/images/profile/profile-1280.jpg")}
         srcSet={jpegSourceSet}
         sizes={profileSizes}
         width={1280}

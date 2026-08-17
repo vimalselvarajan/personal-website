@@ -104,7 +104,7 @@ test("nested research routes keep their collection tab active", async ({ page, i
   await expect(navigation.getByRole("link", { name: "Projects", exact: true })).toHaveCount(0);
 });
 
-test("Projects reserves a third featured slot with responsive spacing", async ({ page }) => {
+test("Projects exposes C-Audit as the third GitHub-only featured card with responsive spacing", async ({ page }) => {
   await page.goto("./projects/");
 
   const featuredScenes = page.locator(".project-featured-grid > .atlas-scene");
@@ -120,11 +120,15 @@ test("Projects reserves a third featured slot with responsive spacing", async ({
   await expect(featuredScenes.nth(1).getByRole("link", { name: "Project details" })).toHaveAttribute("href", /\/projects\/hastest-control-suite\/$/);
   await expect(featuredScenes.nth(1).getByRole("link", { name: "GitHub" })).toBeVisible();
 
-  const reservedSlot = featuredScenes.nth(2);
-  await expect(reservedSlot).toHaveAttribute("data-scene", "reserved-project-slot");
-  await expect(reservedSlot.getByRole("heading", { name: "Project in progress" })).toBeVisible();
-  await expect(reservedSlot.getByText("Reserved for the next featured build.")).toBeVisible();
-  await expect(reservedSlot.getByRole("link")).toHaveCount(0);
+  const cAudit = featuredScenes.nth(2);
+  await expect(cAudit).toHaveAttribute("data-scene", "c-audit");
+  await expect(cAudit.getByRole("heading", { name: "C-Audit" })).toBeVisible();
+  await expect(cAudit.getByText("Available on GitHub.")).toBeVisible();
+  const githubLink = cAudit.getByRole("link", { name: "View C-Audit on GitHub (opens in a new tab)" });
+  await expect(githubLink).toHaveAttribute("href", "https://github.com/vimalselvarajan/C-Audit");
+  await expect(githubLink).toHaveAttribute("target", "_blank");
+  await expect(githubLink).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(cAudit.getByRole("link")).toHaveCount(1);
 
   const gaps = await featuredScenes.evaluateAll((scenes) => scenes.slice(1).map((scene, index) => {
     const previous = scenes[index]!.getBoundingClientRect();

@@ -25,16 +25,16 @@ describe("project image variants", () => {
 
   it("derives stable, base-path-independent asset paths", () => {
     expect(getProjectImageVariantPath("12v-to-3v3-buck-converter", 640))
-      .toBe("/projects/responsive/12v-to-3v3-buck-converter-640.webp");
+      .toBe("/assets/images/projects/responsive/12v-to-3v3-buck-converter-640.webp");
     expect(getProjectGalleryImageVariantPath("hastest-control-suite", 2, 960))
-      .toBe("/projects/responsive/hastest-control-suite-gallery-2-960.webp");
+      .toBe("/assets/images/projects/responsive/hastest-control-suite-gallery-2-960.webp");
   });
 
   it("keeps card crops in a collision-free responsive asset namespace", () => {
     expect(getProjectCardImageVariantPath("driver-interfaces", 384, "avif"))
-      .toBe("/projects/responsive/driver-interfaces-card-384.avif");
+      .toBe("/assets/images/projects/responsive/driver-interfaces-card-384.avif");
     expect(getProjectCardImageVariantPath("driver-interfaces", 384, "webp"))
-      .toBe("/projects/responsive/driver-interfaces-card-384.webp");
+      .toBe("/assets/images/projects/responsive/driver-interfaces-card-384.webp");
     expect(getProjectCardImageVariantPath("driver-interfaces", 384, "webp"))
       .not.toBe(getProjectImageVariantPath("driver-interfaces", 384));
   });

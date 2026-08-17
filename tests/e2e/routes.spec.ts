@@ -27,8 +27,8 @@ test("sitemap routes expose canonical metadata", async ({ page, request }, testI
   }
 });
 
-test("public research assets and static metadata files are available", async ({ request }) => {
-  for (const asset of ["./robots.txt", "./sitemap.xml", "./icon.svg", "./research/mtp-lite-genome-assembly-poster.jpg"]) {
+test("public assets and static metadata files are available", async ({ request }) => {
+  for (const asset of ["./robots.txt", "./sitemap.xml", "./assets/icons/site-icon.svg", "./assets/images/research/originals/mtp-lite-genome-assembly-poster.jpg"]) {
     expect((await request.get(asset)).status(), asset).toBe(200);
   }
 });

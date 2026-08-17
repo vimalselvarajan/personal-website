@@ -19,5 +19,5 @@ export function getResearchImageVariantPath(slug: string, width: number) {
     throw new Error('Research image slug must be lowercase kebab-case; received "' + slug + '"');
   }
   assertPositiveInteger(width, "Research image variant width");
-  return "/research/responsive/" + slug + "-" + width + ".webp";
+  return "/assets/images/research/responsive/" + slug + "-" + width + ".webp";
 }

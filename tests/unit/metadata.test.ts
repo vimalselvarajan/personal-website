@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createPageMetadata } from "@/lib/metadata";
 
 const expectedSocialImage = {
-  url: "https://vimalselvarajan.github.io/personal-website/social-preview.png",
+  url: "https://vimalselvarajan.github.io/personal-website/assets/images/social/social-preview.png",
   width: 1200,
   height: 630,
   alt: "Vimal Selvarajan portfolio preview",

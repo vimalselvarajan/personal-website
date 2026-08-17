@@ -15,7 +15,7 @@ import {
 const rootDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const researchContentDirectory = path.join(rootDirectory, "content", "research");
 const publicDirectory = path.join(rootDirectory, "public");
-const outputDirectory = path.join(publicDirectory, "research", "responsive");
+const outputDirectory = path.join(publicDirectory, "assets", "images", "research", "responsive");
 const maximumDetailBytes = 200 * 1024;
 
 sharp.cache(false);

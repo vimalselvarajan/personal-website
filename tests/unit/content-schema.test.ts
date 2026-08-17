@@ -18,12 +18,12 @@ describe("content schemas", () => {
   });
 
   it("accepts complete optional research image metadata", () => {
-    const image = { image: "/research/poster.jpg", imageAlt: "Research poster", imageWidth: 2500, imageHeight: 1875 };
+    const image = { image: "/assets/images/research/originals/poster.jpg", imageAlt: "Research poster", imageWidth: 2500, imageHeight: 1875 };
     expect(researchFrontmatterSchema.parse({ ...validResearch, ...image })).toEqual({ ...validResearch, ...image });
   });
 
   it.each([
-    ["partial image metadata", { image: "/research/poster.jpg", imageAlt: "Research poster", imageWidth: 2500 }],
+    ["partial image metadata", { image: "/assets/images/research/originals/poster.jpg", imageAlt: "Research poster", imageWidth: 2500 }],
     ["an image outside the research directory", { image: "/other/poster.jpg", imageAlt: "Research poster", imageWidth: 2500, imageHeight: 1875 }],
     ["unknown field", { unexpected: true }],
   ])("rejects %s", (_label, image) => {

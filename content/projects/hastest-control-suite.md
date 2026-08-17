@@ -13,28 +13,28 @@ stack:
   - "USB"
   - "GPIB"
 github: "https://github.com/vimalselvarajan/Hastest-SPI-DAC-and-Power-Control"
-image: "/projects/hastest-fixture-overview.jpg"
+image: "/assets/images/projects/originals/hastest-fixture-overview.jpg"
 imageAlt: "Overhead view of the HTOL fixture with development board, FTDI interface, current-sense hardware, and connected test leads"
 imageCaption: "HTOL fixture overview"
 imageWidth: 1280
 imageHeight: 960
 gallery:
-  - src: "/projects/hastest_project.jpg"
+  - src: "/assets/images/projects/originals/hastest_project.jpg"
     width: 800
     height: 571
     alt: "HTOL test hardware arranged on a blue work surface, including a development board and connected electronics"
     caption: "HTOL validation hardware"
-  - src: "/projects/hastest-system-architecture.jpg"
+  - src: "/assets/images/projects/originals/hastest-system-architecture.jpg"
     width: 1280
     height: 1232
     alt: "System architecture diagram for the HTOL station showing the test server, FTDI interface, DACs, power supplies, DAQs, current-sense boards, and 48 devices under test"
     caption: "HTOL station architecture"
-  - src: "/projects/hastest-dut-harness.jpg"
+  - src: "/assets/images/projects/originals/hastest-dut-harness.jpg"
     width: 662
     height: 800
     alt: "Labeled wire harness connections for RF amplifier modules on the HTOL test fixture"
     caption: "DUT harness connections"
-  - src: "/projects/hastest-daq-power.jpg"
+  - src: "/assets/images/projects/originals/hastest-daq-power.jpg"
     width: 600
     height: 800
     alt: "Keysight DAQ973A data-acquisition system stacked above a Hewlett Packard programmable power supply"

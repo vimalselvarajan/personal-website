@@ -14,7 +14,7 @@ describe("research image variants", () => {
 
   it("derives stable, base-path-independent research asset paths", () => {
     expect(getResearchImageVariantPath("optimal-read-selection", 1280))
-      .toBe("/research/responsive/optimal-read-selection-1280.webp");
+      .toBe("/assets/images/research/responsive/optimal-read-selection-1280.webp");
   });
 
   it.each([0, -1, 1.5])("rejects invalid source dimensions: %s", (width) => {

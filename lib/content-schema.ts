@@ -6,8 +6,8 @@ const nonEmptyStrings = z.array(nonEmptyString).min(1);
 const positiveInteger = z.number().int().positive();
 const httpsUrl = z.string().url().refine((value) => new URL(value).protocol === "https:", "must use HTTPS");
 const githubUrl = httpsUrl.refine((value) => new URL(value).hostname === "github.com", "must use github.com");
-const projectImage = z.string().regex(/^\/projects\/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)$/i, "must reference a project image");
-const researchImage = z.string().regex(/^\/research\/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)$/i, "must reference a research image");
+const projectImage = z.string().regex(/^\/assets\/images\/projects\/originals\/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)$/i, "must reference a project original image");
+const researchImage = z.string().regex(/^\/assets\/images\/research\/originals\/[a-zA-Z0-9._-]+\.(?:jpe?g|png|webp)$/i, "must reference a research original image");
 const projectImageAsset = z.object({
   src: projectImage,
   width: positiveInteger,

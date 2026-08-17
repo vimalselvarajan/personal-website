@@ -10,7 +10,7 @@ stack:
   - "Embedded C/C++"
   - "Git"
 github: "https://github.com/vimalselvarajan/24E-Dashboard-Gen-one"
-image: "/projects/ergo.png"
+image: "/assets/images/projects/originals/ergo.png"
 imageAlt: "Altium schematic for an STM32-based driver interface with CAN, power, debug, and reset circuitry"
 imageWidth: 1622
 imageHeight: 1232

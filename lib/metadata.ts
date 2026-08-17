@@ -3,7 +3,7 @@ import { absoluteUrl, canonicalUrl, siteConfig } from "@/config/site";
 import type { PortfolioRoute } from "@/lib/routes";
 
 export const socialImage = {
-  url: absoluteUrl("/social-preview.png"),
+  url: absoluteUrl("/assets/images/social/social-preview.png"),
   width: 1200,
   height: 630,
   alt: `${siteConfig.name} portfolio preview`,

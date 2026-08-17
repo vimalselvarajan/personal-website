@@ -6,8 +6,8 @@ import { fileURLToPath } from "node:url";
 import sharp from "sharp";
 
 const rootDirectory = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const sourcePath = path.join(rootDirectory, "assets/profile/profile-photo.jpg");
-const outputDirectory = path.join(rootDirectory, "public", "profile");
+const sourcePath = path.join(rootDirectory, "assets/source/profile/profile-photo.jpg");
+const outputDirectory = path.join(rootDirectory, "public", "assets", "images", "profile");
 const widths = [384, 640, 768, 1024, 1280];
 const maximumBytes = 120 * 1024;
 
@@ -86,15 +86,15 @@ async function validateSource() {
   const metadata = await sharp(sourcePath).metadata();
 
   if (!metadata.width || !metadata.height) {
-    throw new Error("Unable to read assets/profile/profile-photo.jpg dimensions.");
+    throw new Error("Unable to read assets/source/profile/profile-photo.jpg dimensions.");
   }
   if (metadata.width * 3 !== metadata.height * 4) {
     throw new Error(
-      `assets/profile/profile-photo.jpg must remain 4:3; received ${metadata.width}x${metadata.height}.`,
+      `assets/source/profile/profile-photo.jpg must remain 4:3; received ${metadata.width}x${metadata.height}.`,
     );
   }
   if (metadata.width < widths.at(-1)) {
-    throw new Error(`assets/profile/profile-photo.jpg is too small; expected at least ${widths.at(-1)}px wide.`);
+    throw new Error(`assets/source/profile/profile-photo.jpg is too small; expected at least ${widths.at(-1)}px wide.`);
   }
 }
 

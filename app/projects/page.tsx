@@ -21,6 +21,12 @@ function requireProject(slug: string) {
   return project;
 }
 
+const cAuditFeature = {
+  slug: "c-audit",
+  title: "C-Audit",
+  github: "https://github.com/vimalselvarajan/C-Audit",
+} as const;
+
 const featuredProjectSlots = [
   "mtp-lite",
   "hastest-control-suite",
@@ -89,21 +95,26 @@ export default function ProjectsPage() {
               </article>
               ) : (
                 <article
-                  key="reserved-project-slot"
-                  data-scene="reserved-project-slot"
+                  key={cAuditFeature.slug}
+                  data-scene={cAuditFeature.slug}
                   data-layout={index % 2 === 0 ? "forward" : "reverse"}
-                  className="atlas-scene atlas-scene-placeholder"
-                  aria-labelledby="reserved-project-heading"
+                  className="atlas-scene atlas-scene-github-only"
+                  aria-labelledby="c-audit-heading"
                 >
                   <div className="atlas-scene-visual">
-                    <div className="atlas-placeholder-media" aria-hidden="true">
-                      <span className="atlas-placeholder-mark">03</span>
+                    <div className="atlas-github-only-media" aria-hidden="true">
+                      <ArrowUpRight className="atlas-github-only-mark" />
                     </div>
                   </div>
                   <div className="atlas-scene-copy">
                     <p className="atlas-scene-index">{String(index + 1).padStart(2, "0")}</p>
-                    <h2 id="reserved-project-heading" className="atlas-scene-title">Project in progress</h2>
-                    <p className="atlas-scene-summary">Reserved for the next featured build.</p>
+                    <h2 id="c-audit-heading" className="atlas-scene-title">{cAuditFeature.title}</h2>
+                    <p className="atlas-scene-summary">Available on GitHub.</p>
+                    <div className="atlas-scene-links">
+                      <ExternalAnchor href={cAuditFeature.github} className="atlas-inline-link atlas-inline-link-primary">
+                        View C-Audit on GitHub <ArrowUpRight aria-hidden="true" className="size-4" />
+                      </ExternalAnchor>
+                    </div>
                   </div>
                 </article>
               )

@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     description: siteConfig.metadata.description,
   }),
   title: { default: siteConfig.metadata.title, template: `%s — ${siteConfig.name}` },
-  icons: { icon: absoluteUrl("/icon.svg") },
+  icons: { icon: absoluteUrl("/assets/icons/site-icon.svg") },
 };
 
 export const viewport: Viewport = {

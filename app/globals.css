@@ -537,11 +537,11 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .atlas-inline-link { display: inline-flex; align-items: center; min-height: 2.75rem; gap: 0.45rem; color: var(--scene-accent); text-underline-offset: 0.3rem; }
 .atlas-inline-link:not(.atlas-inline-link-primary) { color: var(--muted-foreground); }
 .atlas-inline-link:hover { text-decoration: underline; }
-.atlas-scene-placeholder { --scene-accent: color-mix(in oklab, var(--link) 58%, var(--muted-foreground)); --scene-wash: color-mix(in oklab, var(--scene-accent) 9%, transparent); }
-.atlas-scene-placeholder::before { opacity: 0.24; }
-.atlas-placeholder-media { display: grid; width: 100%; max-width: 38rem; aspect-ratio: 4 / 3; place-items: center; overflow: hidden; border: 1px dashed color-mix(in oklab, var(--scene-accent) 38%, var(--border)); border-radius: var(--radius-feature); background: radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--scene-accent) 13%, transparent), transparent 52%), color-mix(in oklab, var(--surface) 78%, var(--muted)); box-shadow: var(--glass-shadow-soft); }
-.atlas-placeholder-mark { color: color-mix(in oklab, var(--scene-accent) 34%, var(--surface)); font-family: var(--font-mono); font-size: clamp(4rem, 14vw, 9rem); font-weight: 700; letter-spacing: -0.08em; line-height: 1; }
-.atlas-scene-placeholder .atlas-scene-summary { max-width: 25rem; }
+.atlas-scene-github-only { --scene-accent: color-mix(in oklab, var(--link) 58%, var(--muted-foreground)); --scene-wash: color-mix(in oklab, var(--scene-accent) 9%, transparent); }
+.atlas-scene-github-only::before { opacity: 0.24; }
+.atlas-github-only-media { display: grid; width: 100%; max-width: 38rem; aspect-ratio: 4 / 3; place-items: center; overflow: hidden; border: 1px solid color-mix(in oklab, var(--scene-accent) 38%, var(--border)); border-radius: var(--radius-feature); background: radial-gradient(circle at 50% 45%, color-mix(in oklab, var(--scene-accent) 13%, transparent), transparent 52%), color-mix(in oklab, var(--surface) 78%, var(--muted)); box-shadow: var(--glass-shadow-soft); }
+.atlas-github-only-mark { width: clamp(4rem, 14vw, 9rem); height: clamp(4rem, 14vw, 9rem); color: color-mix(in oklab, var(--scene-accent) 34%, var(--surface)); stroke-width: 1; }
+.atlas-scene-github-only .atlas-scene-summary { max-width: 25rem; }
 [data-scene="12v-to-3v3-buck-converter"] { --scene-accent: oklch(0.55 0.14 255); --scene-wash: oklch(0.69 0.11 255 / 0.18); }
 [data-scene="12v-to-3v3-buck-converter"] .atlas-media { background: transparent; border-color: transparent; box-shadow: none !important; }
 [data-scene="12v-to-3v3-buck-converter"] .atlas-media::after { display: none; }

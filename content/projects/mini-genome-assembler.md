@@ -10,7 +10,7 @@ stack:
   - "FASTA Parsing"
   - "Graph Algorithms"
 github: "https://github.com/vimalselvarajan/mini-genome-assembler"
-image: "/projects/mini_assembler.png"
+image: "/assets/images/projects/originals/mini_assembler.png"
 imageAlt: "Directed overlap graph illustrating sequence fragments used by the mini genome assembler"
 imageWidth: 559
 imageHeight: 488
