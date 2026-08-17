@@ -14,7 +14,7 @@ export type ExternalNavItem = {
 
 export type NavItem = InternalNavItem | ExternalNavItem;
 
-export const portfolioUrl = "https://vimalselvarajan.github.io/Personal-Website";
+export const portfolioUrl = "https://vimalselvarajan.github.io/personal-website";
 export const productionBasePath = new URL(portfolioUrl).pathname.replace(/\/$/, "");
 
 export const siteConfig = {

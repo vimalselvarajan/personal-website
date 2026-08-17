@@ -16,7 +16,7 @@ test("project details serve a right-sized responsive image set", async ({ page, 
   const image = page.locator("article picture img");
   const source = page.locator('article picture source[type="image/webp"]');
   await expect(image).toHaveCount(1);
-  await expect(image).toHaveAttribute("src", "/Personal-Website/projects/12v-to-3v3-buck-converter.png");
+  await expect(image).toHaveAttribute("src", "/personal-website/projects/12v-to-3v3-buck-converter.png");
   await expect(image).toHaveAttribute("width", "1622");
   await expect(image).toHaveAttribute("height", "1159");
   await expect(image).toHaveAttribute("loading", "lazy");

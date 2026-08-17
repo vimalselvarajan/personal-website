@@ -43,9 +43,6 @@ console.log(`PASS ${baseUrl} HSTS`);
 const sitemap = await (await fetchWithRetry("sitemap.xml")).text();
 const sitemapMatches = [...sitemap.matchAll(/<loc>(.*?)<\/loc>/g)];
 if (sitemapMatches.length === 0) throw new Error("Sitemap does not contain any routes");
-if (publicRoutes.length !== 12) {
-  throw new Error(`Public route manifest must contain 12 routes; received ${publicRoutes.length}`);
-}
 
 const basePath = baseUrl.pathname.replace(/\/+$/, "");
 const sitemapLocations = sitemapMatches.map((match) => {

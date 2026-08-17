@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { createPageMetadata } from "@/lib/metadata";
 
 const expectedSocialImage = {
-  url: "https://vimalselvarajan.github.io/Personal-Website/social-preview.png",
+  url: "https://vimalselvarajan.github.io/personal-website/social-preview.png",
   width: 1200,
   height: 630,
   alt: "Vimal Selvarajan portfolio preview",
@@ -21,11 +21,11 @@ describe("page metadata", () => {
       title: "About",
       description: "About page",
       alternates: {
-        canonical: "https://vimalselvarajan.github.io/Personal-Website/about/",
+        canonical: "https://vimalselvarajan.github.io/personal-website/about/",
       },
       openGraph: {
         type: "website",
-        url: "https://vimalselvarajan.github.io/Personal-Website/about/",
+        url: "https://vimalselvarajan.github.io/personal-website/about/",
         title: "About",
         description: "About page",
         images: [expectedSocialImage],

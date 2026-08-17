@@ -17,7 +17,7 @@ test("research details serve a right-sized responsive image set", async ({ page,
   const mobileSource = page.locator('article picture source[type="image/webp"][media]');
   const source = page.locator('article picture source[type="image/webp"]:not([media])');
   await expect(image).toHaveCount(1);
-  await expect(image).toHaveAttribute("src", "/Personal-Website/research/mtp-lite-genome-assembly-poster.jpg");
+  await expect(image).toHaveAttribute("src", "/personal-website/research/mtp-lite-genome-assembly-poster.jpg");
   await expect(image).toHaveAttribute("width", "2500");
   await expect(image).toHaveAttribute("height", "1875");
   await expect(image).toHaveAttribute("loading", "lazy");

@@ -9,7 +9,7 @@ A statically exported Next.js portfolio for Vimal Selvarajan, a UC Riverside com
 - TypeScript 7.0.2 CLI checking with the supported TypeScript 6 compatibility API for ESLint
 - ESLint 10, Vitest with V8 coverage, Playwright, axe, and three-run Lighthouse budgets
 - Repository-authored Markdown rendered without raw HTML or JSX execution
-- Static export for the `/Personal-Website` GitHub Pages base path
+- Static export for the `/personal-website` GitHub Pages base path
 - Responsive profile assets with committed format, dimension, and size budgets
 
 ## Local development
