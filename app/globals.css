@@ -655,8 +655,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
 .resume-timeline-marker {
   transition: transform var(--motion-fast) var(--ease-standard), background-color var(--motion-fast) ease, border-color var(--motion-fast) ease, box-shadow var(--motion-fast) ease;
 }
-.resume-timeline-marker.is-active {
+.resume-timeline-entry[data-reached="true"] .resume-timeline-marker {
+  border-color: var(--link);
+  background: color-mix(in oklab, var(--link) 15%, var(--background));
+}
+.resume-timeline-entry[data-active="true"] .resume-timeline-marker {
   transform: scale(1.08);
+  background: var(--link);
   box-shadow: 0 0 0 0.28rem color-mix(in oklab, var(--link) 16%, var(--muted)), 0 0 0.85rem color-mix(in oklab, var(--link) 48%, transparent);
 }
 .resume-timeline-status {
@@ -684,7 +689,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   border-radius: 999px;
   background: color-mix(in oklab, var(--border) 76%, var(--link));
 }
-.resume-timeline-card.is-active {
+.resume-timeline-entry[data-active="true"] .resume-timeline-card {
   border-color: color-mix(in oklab, var(--link) 40%, var(--border));
   background: color-mix(in oklab, var(--surface) 93%, var(--link));
   box-shadow: 0 1.35rem 3.5rem -2.8rem color-mix(in oklab, var(--link) 72%, var(--foreground));
