@@ -4,7 +4,7 @@ import path from "node:path";
 import { createGzip } from "node:zlib";
 import { productionBasePath } from "../config/site.ts";
 
-const defaultRoot = path.resolve(process.cwd(), "out");
+const defaultRoot = path.resolve(process.cwd(), "docs");
 const contentTypes = {
   ".avif": "image/avif",
   ".css": "text/css; charset=utf-8",

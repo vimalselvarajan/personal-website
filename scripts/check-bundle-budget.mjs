@@ -2,7 +2,7 @@ import fs from "node:fs";
 import path from "node:path";
 import { gzipSync } from "node:zlib";
 
-const outputRoot = path.resolve(process.cwd(), "out");
+const outputRoot = path.resolve(process.cwd(), "docs");
 const budgets = JSON.parse(fs.readFileSync(path.join(process.cwd(), "performance-budgets.json"), "utf8"));
 
 function routeJavaScriptBytes(htmlFile) {

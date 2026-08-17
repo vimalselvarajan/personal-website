@@ -9,5 +9,5 @@ export default defineConfig([
   {
     linterOptions: { reportUnusedDisableDirectives: "error" },
   },
-  globalIgnores([".next/**", "out/**", "build/**", "next-env.d.ts"]),
+  globalIgnores([".next/**", "out/**", "docs/**", "build/**", "next-env.d.ts"]),
 ]);

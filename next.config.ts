@@ -5,6 +5,7 @@ import { productionBasePath } from "./config/site";
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   output: "export",
+  distDir: "docs",
   basePath: process.env.NODE_ENV === "production" ? productionBasePath : "",
   trailingSlash: true,
   images: { unoptimized: true },
