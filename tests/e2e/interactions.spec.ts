@@ -170,6 +170,22 @@ test("résumé preserves research links but omits removed project links", async 
 });
 
 
+test("resume header keeps email, phone, and LinkedIn while omitting GitHub", async ({ page }) => {
+  await page.goto("./resume/");
+
+  const hero = page.locator(".resume-hero");
+  const email = hero.getByRole("link", { name: "vimalselvarajan@gmail.com", exact: true });
+  const phone = hero.getByRole("link", { name: "+1 (510) 598-5492", exact: true });
+  const linkedin = hero.getByRole("link", { name: "LinkedIn", exact: true });
+
+  await expect(email).toHaveAttribute("href", "mailto:vimalselvarajan@gmail.com");
+  await expect(phone).toHaveAttribute("href", "tel:+15105985492");
+  await expect(linkedin).toHaveAttribute("href", "https://www.linkedin.com/in/vimal-selvarajan/");
+  await expect(linkedin).toHaveAttribute("target", "_blank");
+  await expect(linkedin).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(hero.getByRole("link", { name: /GitHub/ })).toHaveCount(0);
+});
+
 test("resume presentation card links safely to the selected presentation", async ({ page }) => {
   await page.goto("./resume/");
 

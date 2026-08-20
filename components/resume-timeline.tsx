@@ -16,19 +16,18 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
     <section
       id="professional-experience"
       aria-labelledby="professional-experience-heading"
-      className="scroll-mt-24 py-20 sm:py-24"
+      className="scroll-mt-24 py-10 sm:py-12 lg:py-14"
       data-resume-timeline
     >
       <ResumeTimelineController entries={entries.map(({ id, shortLabel }) => ({ id, shortLabel }))} />
 
       <div className="max-w-3xl">
-        <p className="eyebrow">Career timeline</p>
-        <h2 id="professional-experience-heading" className="mt-4 text-4xl font-semibold tracking-[-0.05em] sm:text-5xl">
+        <h2 id="professional-experience-heading" className="text-3xl font-semibold tracking-[-0.05em] sm:text-4xl">
           Professional experience
         </h2>
       </div>
 
-      <div className="mt-12 lg:grid lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-14 xl:gap-20">
+      <div className="mt-8 sm:mt-10 lg:grid lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-14 xl:gap-20">
         <aside className="resume-timeline-index relative hidden lg:block print:hidden">
           <nav aria-label="Career timeline" className="resume-timeline-index-panel sticky top-28 rounded-[1.5rem] border border-border bg-surface p-6 shadow-sm">
             <p className="text-xs font-bold uppercase tracking-[0.13em] text-subtle">Trajectory</p>
@@ -59,7 +58,7 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
             aria-hidden="true"
             data-timeline-status
             data-active-timeline-label={initialEntry.id}
-            className="resume-timeline-status sticky top-16 z-20 -mx-5 mb-8 px-5 sm:-mx-8 sm:px-8 lg:hidden print:hidden"
+            className="resume-timeline-status sticky top-16 z-20 -mx-5 mb-6 px-5 sm:-mx-8 sm:px-8 lg:hidden print:hidden"
           >
             <div className="resume-timeline-status-capsule mx-auto flex max-w-2xl items-center justify-between gap-4">
               <span className="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-[0.12em] text-link">

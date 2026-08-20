@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ArrowUpRight, Mail, Mic2, Phone } from "lucide-react";
-import { GitHubIcon, LinkedInIcon } from "@/components/brand-icons";
+import { LinkedInIcon } from "@/components/brand-icons";
 import { Container } from "@/components/container";
 import { ExternalAnchor } from "@/components/external-link";
 import { ResumeTimeline } from "@/components/resume-timeline";
@@ -30,26 +30,30 @@ function ExperienceAnchor({ id }: { id: ExperienceId }) {
 
 export default function ResumePage() {
   return (
-      <article className="resume-page">
+    <article className="resume-page">
       <header className="resume-hero relative overflow-hidden border-b">
         <div className="resume-signal-grid absolute inset-0" aria-hidden="true" />
-        <div className="resume-hero-orb absolute -right-32 -top-32 size-[30rem] rounded-full" aria-hidden="true" />
+        <div className="resume-hero-orb absolute -right-20 -top-28 size-[22rem] rounded-full" aria-hidden="true" />
 
-        <Container className="resume-hero-inner relative py-16 sm:py-20 lg:py-24">
-          <div className="max-w-5xl">
-            <p className="resume-hero-kicker text-xs font-bold uppercase tracking-[0.16em]">Résumé</p>
-            <h1 className="resume-hero-title mt-5">
+        <Container className="resume-hero-inner relative py-8 sm:py-10 lg:py-12">
+          <div>
+            <h1 className="resume-hero-title md:whitespace-nowrap">
               {siteConfig.name}
             </h1>
-            <section aria-labelledby="resume-education-heading" className="mt-7">
+            <section aria-labelledby="resume-education-heading" className="resume-education mt-5 flex flex-wrap items-baseline gap-x-5 gap-y-2">
               <p id="resume-education-heading" className="text-xs font-bold uppercase tracking-[0.16em] text-[color:var(--resume-muted)]">
                 Education
               </p>
-              <ol className="mt-3 grid gap-1 text-sm font-semibold leading-6 sm:text-base">
-                {resumeData.education.map((education) => <li key={education.degree}>{education.degree}</li>)}
+              <ol className="resume-education-degrees flex max-w-5xl flex-wrap gap-x-4 gap-y-1 text-sm font-semibold leading-6 sm:text-base">
+                {resumeData.education.map((education, index) => (
+                  <li key={education.degree} className="flex items-baseline gap-4">
+                    {index > 0 ? <span aria-hidden="true" className="text-[color:var(--resume-muted)]">·</span> : null}
+                    <span>{education.degree}</span>
+                  </li>
+                ))}
               </ol>
             </section>
-            <div className="mt-8 flex flex-wrap gap-3 text-sm">
+            <div className="resume-hero-actions mt-6 flex flex-wrap gap-3 text-sm">
               <a href={resumeData.contact.emailHref} className="resume-hero-contact inline-flex min-h-11 items-center gap-2 rounded-full border px-4 font-semibold">
                 <Mail aria-hidden="true" className="size-4 shrink-0" /><span>{resumeData.contact.email}</span>
               </a>
@@ -59,14 +63,10 @@ export default function ResumePage() {
               <ExternalAnchor href={siteConfig.links.linkedin} aria-label="LinkedIn" title="LinkedIn" className="resume-hero-social inline-flex size-11 items-center justify-center rounded-full border">
                 <LinkedInIcon aria-hidden="true" className="size-5" />
               </ExternalAnchor>
-              <ExternalAnchor href={siteConfig.links.github} aria-label="GitHub" title="GitHub" className="resume-hero-social inline-flex size-11 items-center justify-center rounded-full border">
-                <GitHubIcon aria-hidden="true" className="size-5" />
-              </ExternalAnchor>
             </div>
           </div>
         </Container>
       </header>
-
 
       <Container>
         <ResumeTimeline entries={resumeData.experience} />
@@ -123,6 +123,6 @@ export default function ResumePage() {
           </article>
         </section>
       </Container>
-      </article>
+    </article>
   );
 }

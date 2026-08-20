@@ -597,7 +597,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   background: oklch(0.42 0.055 250 / 0.2);
   filter: blur(18px);
 }
-.resume-hero-kicker, .resume-hero-copy { color: var(--resume-muted); }
+.resume-hero-copy { color: var(--resume-muted); }
 .resume-hero-contact, .resume-hero-social {
   border-color: color-mix(in oklab, var(--resume-foreground) 20%, transparent);
   color: var(--resume-foreground);
@@ -616,12 +616,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   transform: translateY(-1px);
 }
 .resume-hero-social:active { transform: scale(0.94); }
-.resume-hero::after { top: -12rem; right: -10rem; width: 37rem; height: 37rem; border-color: color-mix(in oklab, var(--resume-foreground) 12%, transparent); border-radius: 47% 53% 57% 43% / 42% 46% 54% 58%; box-shadow: inset 0 0 0 3rem color-mix(in oklab, var(--resume-foreground) 4%, transparent), inset 0 0 0 9rem color-mix(in oklab, var(--resume-foreground) 3%, transparent); }
+.resume-hero::after { top: -9rem; right: -7rem; width: 29rem; height: 29rem; border-color: color-mix(in oklab, var(--resume-foreground) 12%, transparent); border-radius: 47% 53% 57% 43% / 42% 46% 54% 58%; box-shadow: inset 0 0 0 2.2rem color-mix(in oklab, var(--resume-foreground) 4%, transparent), inset 0 0 0 6.5rem color-mix(in oklab, var(--resume-foreground) 3%, transparent); }
 .resume-hero-inner {
   z-index: 1;
-  padding-top: calc(var(--site-header-clearance) + 4rem);
+  padding-top: calc(var(--site-header-clearance) + 1.5rem);
 }
-.resume-hero-title { max-width: 8ch; text-wrap: balance; font-size: clamp(2.6rem, 6vw, 5.25rem); font-weight: 650; letter-spacing: -0.06em; line-height: 0.94; }.resume-hero-copy { font-size: 1rem; line-height: 1.65; }.resume-section-heading { max-width: 11ch; text-wrap: balance; font-size: clamp(2.65rem, 5vw, 4.7rem); font-weight: 650; letter-spacing: -0.063em; line-height: 0.92; }.resume-support-card, .resume-timeline-card { background: color-mix(in oklab, var(--surface) 94%, var(--background)); }
+.resume-hero-title { max-width: none; text-wrap: pretty; font-size: clamp(2.6rem, 5vw, 4.5rem); font-weight: 650; letter-spacing: -0.06em; line-height: 0.94; }.resume-hero-copy { font-size: 1rem; line-height: 1.65; }.resume-section-heading { max-width: 11ch; text-wrap: balance; font-size: clamp(2.65rem, 5vw, 4.7rem); font-weight: 650; letter-spacing: -0.063em; line-height: 0.92; }.resume-support-card, .resume-timeline-card { background: color-mix(in oklab, var(--surface) 94%, var(--background)); }
 
 .resume-timeline-index-panel {
   border-color: var(--separator);
@@ -762,7 +762,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   }
 
   .resume-hero-inner {
-    padding-top: calc(var(--site-header-clearance) + 5rem);
+    padding-top: calc(var(--site-header-clearance) + 2rem);
   }
 }
 
@@ -772,7 +772,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible {
   }
 
   .resume-hero-inner {
-    padding-top: calc(var(--site-header-clearance) + 6rem);
+    padding-top: calc(var(--site-header-clearance) + 2.5rem);
   }
 }
 
