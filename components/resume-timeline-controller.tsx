@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import type { ExperienceId } from "@/lib/resume-data";
 
 type TimelineEntry = {
@@ -13,7 +13,26 @@ type ResumeTimelineControllerProps = {
 };
 
 export function ResumeTimelineController({ entries }: ResumeTimelineControllerProps) {
+  const [timelineEnabled, setTimelineEnabled] = useState(false);
+
   useEffect(() => {
+    const enableTimeline = () => setTimelineEnabled(true);
+
+    window.addEventListener("scroll", enableTimeline, { once: true, passive: true });
+    window.addEventListener("pointerdown", enableTimeline, { once: true, passive: true });
+    window.addEventListener("keydown", enableTimeline, { once: true });
+    if (window.location.hash.startsWith("#experience-")) enableTimeline();
+
+    return () => {
+      window.removeEventListener("scroll", enableTimeline);
+      window.removeEventListener("pointerdown", enableTimeline);
+      window.removeEventListener("keydown", enableTimeline);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!timelineEnabled) return;
+
     const timeline = document.querySelector<HTMLElement>("[data-resume-timeline]");
     const initialEntry = entries[0];
     if (!timeline || !initialEntry) return;
@@ -108,7 +127,7 @@ export function ResumeTimelineController({ entries }: ResumeTimelineControllerPr
       resizeObserver?.disconnect();
       window.removeEventListener("resize", updateSelection);
     };
-  }, [entries]);
+  }, [entries, timelineEnabled]);
 
   return null;
 }
