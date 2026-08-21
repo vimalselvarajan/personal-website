@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { FileText, FlaskConical, FolderKanban, House } from "lucide-react";
 import { usePathname } from "next/navigation";
-import { type NavItem, visibleNavigationItems } from "@/config/site";
+import { type NavItem } from "@/config/site";
 import { ExternalAnchor } from "@/components/external-link";
 import { GlassSurface } from "@/components/ui/glass-surface";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,7 @@ type MobileNavDockProps = { items: readonly NavItem[] };
 
 export function MobileNavDock({ items }: MobileNavDockProps) {
   const pathname = usePathname();
-  const visibleItems = visibleNavigationItems(items, pathname, { includeProjectsOnResume: true });
+  const visibleItems = items;
 
   return (
     <nav aria-label="Mobile primary" className="mobile-nav-dock lg:hidden">

@@ -101,7 +101,12 @@ test("nested research routes keep their collection tab active", async ({ page, i
   await page.goto("./research/optimal-read-selection/");
   const navigation = page.getByRole("navigation", { name: isMobile ? "Mobile primary" : "Primary" });
   await expect(navigation.getByRole("link", { name: "Research", exact: true })).toHaveAttribute("aria-current", "page");
-  await expect(navigation.getByRole("link", { name: "Projects", exact: true })).toHaveCount(0);
+  if (isMobile) {
+    await expect(navigation.getByRole("link")).toHaveCount(4);
+    await expect(navigation.getByRole("link", { name: "Projects", exact: true })).toBeVisible();
+  } else {
+    await expect(navigation.getByRole("link", { name: "Projects", exact: true })).toHaveCount(0);
+  }
 });
 
 test("Projects exposes C-Audit as the third GitHub-only featured card with responsive spacing", async ({ page }) => {
