@@ -174,6 +174,21 @@ test("résumé preserves research links but omits removed project links", async 
   await expect(page.getByRole("link", { name: "Projects", exact: true })).toHaveCount(0);
 });
 
+test("résumé groups Highlander Racing roles under a secure company link", async ({ page }) => {
+  await page.goto("./resume/");
+
+  const highlander = page.locator("#experience-highlander-racing");
+  const companyLink = highlander.getByRole("link", { name: "Highlander Racing (opens in a new tab)" });
+
+  await expect(companyLink).toHaveAttribute("href", "https://www.linkedin.com/company/27106311/");
+  await expect(companyLink).toHaveAttribute("target", "_blank");
+  await expect(companyLink).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(highlander.getByRole("heading", { name: "Associate Firmware Engineer" })).toBeVisible();
+  await expect(highlander.getByText("January 2024 – June 2024", { exact: true })).toBeVisible();
+  await expect(highlander.getByText("Integrated CAN bus communication for real-time vehicle data transmission and fault detection.", { exact: true })).toBeVisible();
+  await expect(highlander.getByRole("heading", { name: "Firmware Intern" })).toBeVisible();
+  await expect(highlander.getByText("August 2023 – December 2023", { exact: true })).toBeVisible();
+});
 
 test("resume header keeps email, phone, and LinkedIn while omitting GitHub", async ({ page }) => {
   await page.goto("./resume/");
@@ -221,7 +236,7 @@ test("mobile career timeline status follows the visible role", async ({ page, is
   test.skip(!isMobile, "Mobile career timeline behavior");
   await page.goto("./resume/");
 
-  await expect(page.locator(".resume-timeline-marker")).toHaveCount(4);
+  await expect(page.locator(".resume-timeline-marker")).toHaveCount(5);
   await page.locator("#experience-lonardi-lab").evaluate((entry) => entry.scrollIntoView({ block: "start" }));
   await expect.poll(() => page.locator(".resume-timeline-status").getAttribute("data-active-timeline-label")).toBe("lonardi-lab");
 });

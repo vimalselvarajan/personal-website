@@ -7,32 +7,52 @@ export type EducationEntry = {
   planned?: boolean;
 };
 
-export type ExperienceId = "brisk-lab" | "sadredini-lab" | "lonardi-lab" | "hastest";
+export type ExperienceId = "brisk-lab" | "sadredini-lab" | "lonardi-lab" | "hastest" | "highlander-racing";
 
 export type ResumeDomain =
   | "Computer architecture"
   | "Secure systems"
   | "Computational genomics"
-  | "Hardware automation";
+  | "Hardware automation"
+  | "Embedded systems & firmware";
 
 export type RelatedWorkLink = {
   label: string;
   href: Route<`/research/${string}`>;
 };
 
-export type ExperienceEntry = {
+export type ExperienceRole = {
+  role: string;
+  dates: string;
+  highlights: readonly string[];
+};
+
+type ExperienceBase = {
   id: ExperienceId;
   shortLabel: string;
   organization: string;
-  role: string;
+  organizationHref?: string;
   location: string;
   dates: string;
   kind: "research" | "industry";
   domains: readonly ResumeDomain[];
   technologies: readonly string[];
   relatedWork?: RelatedWorkLink;
-  highlights: readonly string[];
 };
+
+type SingleRoleExperience = ExperienceBase & {
+  role: string;
+  highlights: readonly string[];
+  roles?: never;
+};
+
+type MultiRoleExperience = ExperienceBase & {
+  roles: readonly ExperienceRole[];
+  role?: never;
+  highlights?: never;
+};
+
+export type ExperienceEntry = SingleRoleExperience | MultiRoleExperience;
 
 export type SkillGroup = {
   category: string;
@@ -137,12 +157,43 @@ export const resumeData = {
         "Partnered with customers and hardware engineers to translate test requirements into DAC and current-sense PCBA fixtures, then brought up and operated the end-to-end test station.",
       ],
     },
+    {
+      id: "highlander-racing",
+      shortLabel: "Highlander Racing",
+      organization: "Highlander Racing",
+      organizationHref: "https://www.linkedin.com/company/27106311/",
+      location: "Riverside, CA",
+      dates: "August 2023 – June 2024",
+      kind: "industry",
+      domains: ["Embedded systems & firmware"],
+      technologies: ["C", "STM32F405", "STM32CubeIDE", "Altium Designer", "CAN bus", "JTAG"],
+      roles: [
+        {
+          role: "Associate Firmware Engineer",
+          dates: "January 2024 – June 2024",
+          highlights: [
+            "Designed a PCB interface linking an STM32F-series development board to an AMOLED display for the second-generation driver dashboard.",
+            "Designed and optimized multi-layer driver-dashboard PCB layouts in Altium Designer, prioritizing component placement and high-speed signal integrity.",
+            "Produced detailed schematics and manufacturing documentation to align the engineering and production teams.",
+            "Integrated CAN bus communication for real-time vehicle data transmission and fault detection.",
+            "Developed and debugged STM32F405RGT ADC firmware using STM32CubeIDE and JTAG, improving signal accuracy and system reliability.",
+          ],
+        },
+        {
+          role: "Firmware Intern",
+          dates: "August 2023 – December 2023",
+          highlights: [
+            "Built foundational skills in STM32CubeIDE, low-level C programming, Altium Designer, and PCB design principles.",
+          ],
+        },
+      ],
+    },
   ] satisfies ExperienceEntry[],
   skills: [
     {
       category: "Languages",
       items: ["Python", "C/C++", "TypeScript", "Java", "SQL", "Bash", "Verilog", "Assembly"],
-      evidence: ["brisk-lab", "lonardi-lab", "hastest"],
+      evidence: ["brisk-lab", "lonardi-lab", "hastest", "highlander-racing"],
     },
     {
       category: "Web & databases",
@@ -151,8 +202,8 @@ export const resumeData = {
     },
     {
       category: "Systems & hardware",
-      items: ["SPI", "I2C", "USB", "TCP/IP", "GPIB", "FTDI", "Linux/Unix", "Altium", "SolidWorks"],
-      evidence: ["hastest"],
+      items: ["SPI", "I2C", "USB", "TCP/IP", "GPIB", "FTDI", "Linux/Unix", "Altium Designer", "STM32", "CAN bus", "PCB design", "SolidWorks"],
+      evidence: ["hastest", "highlander-racing"],
     },
     {
       category: "Computer architecture",
@@ -167,7 +218,7 @@ export const resumeData = {
     {
       category: "Developer tools",
       items: ["Git", "CMake", "Make", "GCC", "GDB", "STM32CubeIDE", "PlatformIO", "pytest"],
-      evidence: ["brisk-lab", "lonardi-lab", "hastest"],
+      evidence: ["brisk-lab", "lonardi-lab", "hastest", "highlander-racing"],
     },
   ] satisfies SkillGroup[],
   presentation: {

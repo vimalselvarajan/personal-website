@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { ArrowRight, BriefcaseBusiness, FlaskConical, MapPin } from "lucide-react";
+import { ExternalLink } from "@/components/external-link";
 import { ResumeTimelineController } from "@/components/resume-timeline-controller";
 import { Badge } from "@/components/ui/badge";
 import type { ExperienceEntry } from "@/lib/resume-data";
@@ -108,9 +109,12 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
                     <div className="mt-6 grid gap-5 sm:grid-cols-[1fr_auto] sm:gap-x-8">
                       <div>
                         <h3 id={`experience-${entry.id}-heading`} className="text-2xl font-semibold tracking-[-0.035em] sm:text-3xl">
-                          {entry.organization}
+                          {entry.organizationHref ? (
+                            <ExternalLink href={entry.organizationHref} className="min-h-11 text-foreground">
+                              {entry.organization}
+                            </ExternalLink>
+                          ) : entry.organization}
                         </h3>
-                        <p className="mt-2 text-sm font-medium leading-6 text-muted-foreground">{entry.role}</p>
                       </div>
                       <div className="text-sm sm:text-right">
                         <p className="font-semibold text-foreground">{entry.dates}</p>
@@ -120,14 +124,38 @@ export function ResumeTimeline({ entries }: ResumeTimelineProps) {
                       </div>
                     </div>
 
-                    <ul className="mt-7 grid gap-4 text-sm leading-6 text-muted-foreground">
-                      {entry.highlights.map((highlight) => (
-                        <li key={highlight} className="grid grid-cols-[0.5rem_1fr] gap-3">
-                          <span aria-hidden="true" className="mt-[0.6rem] size-1.5 rounded-full bg-link" />
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
+                    {entry.roles ? (
+                      <ol className="mt-7 divide-y divide-border border-y border-border">
+                        {entry.roles.map((role) => (
+                          <li key={role.role} className="py-6 first:pt-0 last:pb-0">
+                            <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+                              <h4 className="text-lg font-semibold tracking-[-0.025em]">{role.role}</h4>
+                              <p className="text-sm font-semibold text-muted-foreground">{role.dates}</p>
+                            </div>
+                            <ul className="mt-5 grid gap-4 text-sm leading-6 text-muted-foreground">
+                              {role.highlights.map((highlight) => (
+                                <li key={highlight} className="grid grid-cols-[0.5rem_1fr] gap-3">
+                                  <span aria-hidden="true" className="mt-[0.6rem] size-1.5 rounded-full bg-link" />
+                                  <span>{highlight}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </li>
+                        ))}
+                      </ol>
+                    ) : (
+                      <>
+                        <p className="mt-2 text-sm font-medium leading-6 text-muted-foreground">{entry.role}</p>
+                        <ul className="mt-7 grid gap-4 text-sm leading-6 text-muted-foreground">
+                          {entry.highlights.map((highlight) => (
+                            <li key={highlight} className="grid grid-cols-[0.5rem_1fr] gap-3">
+                              <span aria-hidden="true" className="mt-[0.6rem] size-1.5 rounded-full bg-link" />
+                              <span>{highlight}</span>
+                            </li>
+                          ))}
+                        </ul>
+                      </>
+                    )}
 
                     <div className="resume-interactive-only mt-7 border-t border-border pt-6">
                       <div className="flex flex-wrap gap-2">
